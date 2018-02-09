@@ -1,8 +1,63 @@
-body {
-  background-color: #e3e3e3;
+* {
+  box-sizing: border-box;
+}
 
-  h1{
-    text-align: center;
+.jimba {
+  background-image: url(/images/jimba.gif);
+  background-size: cover;
+}
+
+.wall {
+  background-color: brown;
+}
+
+.enemy {
+  background-image: url(/images/cool-guy.gif);
+  background-size: cover;
+}
+
+@-webkit-keyframes fadeInOutGreen {
+  0%   { background-color: #FFFFFF; }
+  50%  { background-color: green; }
+  100% { background-color: #FFFFFF; }
+}
+@-moz-keyframes fadeOutGreen {
+  0%   { background-color: #FFFFFF; }
+  50%  { background-color: green; }
+  100% { background-color: #FFFFFF; }
+}
+@-o-keyframes fadeOutGreen {
+  0%   { background-color: #FFFFFF; }
+  50%  { background-color: green; }
+  100% { background-color: #FFFFFF; }
+}
+@keyframes fadeOutGreen {
+  0%   { background-color: #FFFFFF; }
+  50%  { background-color: green; }
+  100% { background-color: #FFFFFF; }
+}
+
+.fadeInOutGreen {
+  -webkit-animation: fadeInOutGreen 1500ms ease-in-out;
+     -moz-animation: fadeInOutGreen 1500ms ease-in-out;
+       -o-animation: fadeInOutGreen 1500ms ease-in-out;
+          animation: fadeInOutGreen 1500ms ease-in-out;
+}
+
+body {
+  div#grid {
+    // background-color: #e3e3e3;
+    height: 500px; //50 * js height var
+    width: 500px; // 50 * js wdith var
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    div {
+      border: 1px solid black;
+      height: 10%;
+      width: 10%;
+      display: inline-block;
+    }
   }
 
 }
