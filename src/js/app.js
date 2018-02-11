@@ -15,16 +15,18 @@ window.addEventListener('DOMContentLoaded', () => {
   const height = 10;
   const width = 10;
   const grid = document.querySelector('#grid');
+  const fartMeter = document.querySelector('#fartMeter');
   // cells array will get populated with the div's generated
   const cells = [];
   // currentCell = jimba's position
   let currentCell = 0;
   // enemyCell = enemy's position
   let enemyCell = 99;
-  // fartMeter = jimba's fart fuel
-  let fartMeter = 10;
-  console.log(fartMeter);
+  // chickenCell = chicken position
   let chickenCell = null;
+  // fartMeter = jimba's fart fuel
+  let farts = 20;
+  console.log(farts);
 
   // GENERATE SQUARE
   for (let i=0; i<height*width; i++) {
@@ -32,6 +34,11 @@ window.addEventListener('DOMContentLoaded', () => {
     grid.appendChild(div);
     cells.push(div);
   }
+
+  //GENERATE FART METER
+  const div = document.createElement('div');
+  const collectedFart = fartMeter.appendChild(div);
+  collectedFart.style.cssText = `background-color: green; height: 100%; width: ${farts}%`;
 
   // GENERATE WALLS
   // turn into wallDictionary later
@@ -56,8 +63,6 @@ window.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('keydown', (e) => {
     if (currentCell === chickenCell) {
       cells[chickenCell].classList.remove('chicken');
-      fartMeter += 5;
-      console.log(fartMeter);
       chickenCell = Math.floor(Math.random() * (height*width));
       // position cannot be the same as a wall.
       walls.forEach((wall) => {
@@ -66,6 +71,15 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       });
       cells[chickenCell].classList.add('chicken');
+      if (farts < 100) {
+        farts += 5;
+        if (farts >= 100) {
+          farts = 100;
+          collectedFart.style.width = '100%';
+        }
+        collectedFart.style.width = `${farts}%`;
+        console.log(farts);
+      }
     }
     if (e.keyCode === 39 || e.keyCode === 68) {
       console.log('right arrow pressed');
@@ -103,9 +117,9 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     if (e.keyCode === 32) {
       console.log('spacebar pressed');
-      if (fartMeter > 0) {
-        fartMeter--;
-        console.log(fartMeter);
+      if (farts > 0) {
+        farts--;
+        collectedFart.style.width = `${farts}%`;
         const fartCell = cells[currentCell];
         fartCell.classList.add('fadeInOutGreen');
         window.setTimeout(() => {

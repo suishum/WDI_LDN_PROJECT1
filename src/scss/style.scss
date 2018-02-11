@@ -67,5 +67,11 @@ body {
       display: inline-block;
     }
   }
+  div#fartMeter {
+    width: 500px; // 50 * js wdith var
+    height: 50px;
+    margin: 20px auto;
+    border: 1px solid black;
+  }
 
 }
