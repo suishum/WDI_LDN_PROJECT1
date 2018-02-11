@@ -61,6 +61,17 @@ window.addEventListener('DOMContentLoaded', () => {
   cells[currentCell].classList.add('jimba');
   // MAKE JIMBA MOVE & FART -> CAN'T MOVE PAST GRID EDGE & CAN'T MOVE INTO WALLS, MOVE WITH ARROW KEYS OR WASD. PRESS SPACEBAR TO FART.
   window.addEventListener('keydown', (e) => {
+    // stop enemy when it collides with jimba, ADD SAD SIMBA ANIMATION
+    if (currentCell === enemyCell) {
+      clearInterval(enemyTimer);
+      console.log('jimba loses ):');
+      //END GAME or REDUCE LIFE COUNTER or REDUCE FARTMETER
+    }
+    if (cells[enemyCell].classList.contains('fart')) {
+      clearInterval(enemyTimer);
+      console.log('enemy succesfully farted on');
+      // add enemy lose animation + add to score
+    }
     if (currentCell === chickenCell) {
       cells[chickenCell].classList.remove('chicken');
       chickenCell = Math.floor(Math.random() * (height*width));
@@ -121,10 +132,10 @@ window.addEventListener('DOMContentLoaded', () => {
         farts--;
         collectedFart.style.width = `${farts}%`;
         const fartCell = cells[currentCell];
-        fartCell.classList.add('fadeInOutGreen');
+        fartCell.classList.add('fart');
         window.setTimeout(() => {
-          fartCell.classList.remove('fadeInOutGreen');
-        }, 1500);
+          fartCell.classList.remove('fart');
+        }, 2000);
       }
     }
   }, false);
@@ -135,10 +146,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const enemyFacing = ['right', 'left', 'up', 'down'];
   let direction = enemyFacing[0]; //initialise at right
   const enemyTimer = window.setInterval(() => { // stop enemy movement when on the same square as jimba (minus score) or when enemy collides with fart (plus score).
-    // stop enemy when it collides with jimba, ADD SAD SIMBA ANIMATION
-    if (currentCell === enemyCell) {
-      clearInterval(enemyTimer);
-    }
+
     // use switch statement to move enemy
     switch(direction) {
       case 'right':
@@ -147,9 +155,7 @@ window.addEventListener('DOMContentLoaded', () => {
           enemyCell += 1;
           cells[enemyCell].classList.add('enemy');
         } else {
-          console.log(direction);
           direction = enemyFacing[Math.floor(Math.random() * enemyFacing.length)];
-          console.log(direction);
         }
         break;
       case 'left':
@@ -158,9 +164,7 @@ window.addEventListener('DOMContentLoaded', () => {
           enemyCell -= 1;
           cells[enemyCell].classList.add('enemy');
         } else {
-          console.log(direction);
           direction = enemyFacing[Math.floor(Math.random() * enemyFacing.length)];
-          console.log(direction);
         }
         break;
       case 'down':
@@ -169,9 +173,7 @@ window.addEventListener('DOMContentLoaded', () => {
           enemyCell += width;
           cells[enemyCell].classList.add('enemy');
         } else {
-          console.log(direction);
           direction = enemyFacing[Math.floor(Math.random() * enemyFacing.length)];
-          console.log(direction);
         }
         break;
       case 'up':
@@ -180,9 +182,7 @@ window.addEventListener('DOMContentLoaded', () => {
           enemyCell -= width;
           cells[enemyCell].classList.add('enemy');
         } else {
-          console.log(direction);
           direction = enemyFacing[Math.floor(Math.random() * enemyFacing.length)];
-          console.log(direction);
         }
         break;
     }
@@ -193,7 +193,6 @@ window.addEventListener('DOMContentLoaded', () => {
   // extra bits
   //
   // flip sprite when changing direction
-  // add chicken/ fart meter
   // add theme music
   // add fart/ bark/ camera sounds
   // make grid bigger?

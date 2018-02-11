@@ -29,23 +29,23 @@
   50%  { background-color: green; }
   100% { background-color: #FFFFFF; }
 }
-@-moz-keyframes fadeOutGreen {
+@-moz-keyframes fadeInOutGreen {
   0%   { background-color: #FFFFFF; }
   50%  { background-color: green; }
   100% { background-color: #FFFFFF; }
 }
-@-o-keyframes fadeOutGreen {
+@-o-keyframes fadeInOutGreen {
   0%   { background-color: #FFFFFF; }
   50%  { background-color: green; }
   100% { background-color: #FFFFFF; }
 }
-@keyframes fadeOutGreen {
+@keyframes fadeInOutGreen {
   0%   { background-color: #FFFFFF; }
   50%  { background-color: green; }
   100% { background-color: #FFFFFF; }
 }
 
-.fadeInOutGreen {
+.fart {
   -webkit-animation: fadeInOutGreen 1500ms ease-in-out;
      -moz-animation: fadeInOutGreen 1500ms ease-in-out;
        -o-animation: fadeInOutGreen 1500ms ease-in-out;
