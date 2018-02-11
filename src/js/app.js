@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // enemyCell = enemy's position
   let enemyCell = 99;
   // fartMeter = jimba's fart fuel
-  let fartMeter = 100;
+  let fartMeter = 10;
   console.log(fartMeter);
   let chickenCell = null;
 
@@ -55,9 +55,9 @@ window.addEventListener('DOMContentLoaded', () => {
   // MAKE JIMBA MOVE & FART -> CAN'T MOVE PAST GRID EDGE & CAN'T MOVE INTO WALLS, MOVE WITH ARROW KEYS OR WASD. PRESS SPACEBAR TO FART.
   window.addEventListener('keydown', (e) => {
     if (currentCell === chickenCell) {
+      cells[chickenCell].classList.remove('chicken');
       fartMeter += 5;
       console.log(fartMeter);
-      cells[chickenCell].classList.remove('chicken');
       chickenCell = Math.floor(Math.random() * (height*width));
       // position cannot be the same as a wall.
       walls.forEach((wall) => {
@@ -103,11 +103,15 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     if (e.keyCode === 32) {
       console.log('spacebar pressed');
-      const fartCell = cells[currentCell];
-      fartCell.classList.add('fadeInOutGreen');
-      window.setTimeout(() => {
-        fartCell.classList.remove('fadeInOutGreen');
-      }, 1500);
+      if (fartMeter > 0) {
+        fartMeter--;
+        console.log(fartMeter);
+        const fartCell = cells[currentCell];
+        fartCell.classList.add('fadeInOutGreen');
+        window.setTimeout(() => {
+          fartCell.classList.remove('fadeInOutGreen');
+        }, 1500);
+      }
     }
   }, false);
 
