@@ -89,7 +89,11 @@ window.addEventListener('DOMContentLoaded', () => {
   // ALGORITHM TO MOVE ENEMY
   const enemyFacing = ['right', 'left', 'up', 'down'];
   let direction = enemyFacing[0]; //initialise at right
-  const enemyTimer = window.setInterval(() => {
+  const enemyTimer = window.setInterval(() => { // stop enemy movement when on the same square as jimba (minus score) or when enemy collides with fart (plus score).
+    // stop enemy when it collides with jimba, ADD SAD SIMBA ANIMATION
+    if (currentCell === enemyCell) {
+      clearInterval(enemyTimer);
+    }
     // use switch statement to move enemy
     switch(direction) {
       case 'right':
@@ -139,11 +143,16 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }, 1000);
 
+
+
   // extra bits
+  //
   // flip sprite when changing direction
   // add chicken/ fart meter
   // add theme music
   // add fart/ bark/ camera sounds
+  // make grid bigger?
+  // add title page + definition of cropdusting + story
   // enter konami code to get a full fart boost
   //
 
