@@ -5,6 +5,7 @@
 .jimba {
   background-image: url(/images/jimba.gif);
   background-size: cover;
+  z-index: 2;
 }
 
 .wall {
@@ -14,6 +15,13 @@
 .enemy {
   background-image: url(/images/cool-guy.gif);
   background-size: cover;
+  z-index: 1;
+}
+
+.chicken {
+  background-image: url(/images/chicken.png);
+  background-size: cover;
+  z-index: 1;
 }
 
 @-webkit-keyframes fadeInOutGreen {

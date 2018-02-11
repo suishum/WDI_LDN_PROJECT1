@@ -21,6 +21,10 @@ window.addEventListener('DOMContentLoaded', () => {
   let currentCell = 0;
   // enemyCell = enemy's position
   let enemyCell = 99;
+  // fartMeter = jimba's fart fuel
+  let fartMeter = 100;
+  console.log(fartMeter);
+  let chickenCell = null;
 
   // GENERATE SQUARE
   for (let i=0; i<height*width; i++) {
@@ -36,10 +40,33 @@ window.addEventListener('DOMContentLoaded', () => {
     cells[walls[i]].classList.add('wall');
   }
 
+  // ADD CHICKEN POWERUP TO THE BOARD
+  chickenCell = Math.floor(Math.random() * (height*width));
+  // position cannot be the same as a wall.
+  walls.forEach((wall) => {
+    if (chickenCell === wall) {
+      chickenCell = Math.floor(Math.random() * (height*width));
+    }
+  });
+  cells[chickenCell].classList.add('chicken');
+
   // ADD JIMBA TO BOARD
   cells[currentCell].classList.add('jimba');
   // MAKE JIMBA MOVE & FART -> CAN'T MOVE PAST GRID EDGE & CAN'T MOVE INTO WALLS, MOVE WITH ARROW KEYS OR WASD. PRESS SPACEBAR TO FART.
   window.addEventListener('keydown', (e) => {
+    if (currentCell === chickenCell) {
+      fartMeter += 5;
+      console.log(fartMeter);
+      cells[chickenCell].classList.remove('chicken');
+      chickenCell = Math.floor(Math.random() * (height*width));
+      // position cannot be the same as a wall.
+      walls.forEach((wall) => {
+        if (chickenCell === wall) {
+          chickenCell = Math.floor(Math.random() * (height*width));
+        }
+      });
+      cells[chickenCell].classList.add('chicken');
+    }
     if (e.keyCode === 39 || e.keyCode === 68) {
       console.log('right arrow pressed');
       if(currentCell%width !== width-1 && !cells[currentCell+1].classList.contains('wall')){
