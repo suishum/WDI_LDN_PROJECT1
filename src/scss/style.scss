@@ -18,39 +18,55 @@
   z-index: 1;
 }
 
-.jimba {
-  background-image: url(/images/jimba-right.gif);
+.time {
+  background-image: url(/images/timeboost.png);
   background-size: cover;
-  z-index: 2;
+  z-index: 1;
 }
 
-@-webkit-keyframes fadeInOutGreen {
-  0%   { background-color: #FFFFFF; }
-  50%  { background-color: green; }
-  100% { background-color: #FFFFFF; }
-}
-@-moz-keyframes fadeInOutGreen {
-  0%   { background-color: #FFFFFF; }
-  50%  { background-color: green; }
-  100% { background-color: #FFFFFF; }
-}
-@-o-keyframes fadeInOutGreen {
-  0%   { background-color: #FFFFFF; }
-  50%  { background-color: green; }
-  100% { background-color: #FFFFFF; }
-}
-@keyframes fadeInOutGreen {
-  0%   { background-color: #FFFFFF; }
-  50%  { background-color: green; }
-  100% { background-color: #FFFFFF; }
+.fart:before {
+  opacity: 0.1;
 }
 
 .fart {
-  -webkit-animation: fadeInOutGreen 1500ms ease-in-out;
-     -moz-animation: fadeInOutGreen 1500ms ease-in-out;
-       -o-animation: fadeInOutGreen 1500ms ease-in-out;
-          animation: fadeInOutGreen 1500ms ease-in-out;
+  background-image: url(/images/fart.gif);
+  background-size: cover;
+  // opacity: 1;
+  // transition: opacity 2s ease-in-out;
+  // background-color: black;
+  animation: fadeInOut 1500ms ease-in-out;
+  // -webkit-animation: fadeInOutGreen 1500ms ease-in-out;
+  //    -moz-animation: fadeInOutGreen 1500ms ease-in-out;
+  //      -o-animation: fadeInOutGreen 1500ms ease-in-out;
 }
+.jimba-right {
+  // background-image: url(/images/jimba-right.gif);
+  // background-size: cover;
+  // z-index: 2;
+  content: url(/images/jimba-right.gif);
+}
+
+@keyframes fadeInOut {
+  0%   { background-color: rgba(255, 255, 255, 0); }
+  50%  { background-color: rgba(255, 255, 255, 1); }
+  100% { background-color: rgba(255, 255, 255, 0); }
+}
+// @-webkit-keyframes fadeInOutGreen {
+//   0%   { background-color: #FFFFFF; }
+//   50%  { background-color: green; }
+//   100% { background-color: #FFFFFF; }
+// }
+// @-moz-keyframes fadeInOutGreen {
+//   0%   { background-color: #FFFFFF; }
+//   50%  { background-color: green; }
+//   100% { background-color: #FFFFFF; }
+// }
+// @-o-keyframes fadeInOutGreen {
+//   0%   { background-color: #FFFFFF; }
+//   50%  { background-color: green; }
+//   100% { background-color: #FFFFFF; }
+// }
+
 
 body {
   div.container {
@@ -76,17 +92,23 @@ body {
       justify-content: flex-start;
       flex-direction: column;
       width: 200px;
+      #score {
+        width:  100%; // 50 * js wdith var
+        height: 50px;
+        margin: 10px auto;
+        border: 1px solid black;
+      }
     }
   }
 
   #fartMeter {
     width: 700px; // 50 * js wdith var
-    height: 50px;
+    height: 20px;
     margin: 10px auto;
     border: 1px solid black;
   }
-  #score {
-    width:  700px; // 50 * js wdith var
+  #message {
+    width: 700px; // 50 * js wdith var
     height: 50px;
     margin: 10px auto;
     border: 1px solid black;

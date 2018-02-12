@@ -27,12 +27,12 @@ window.addEventListener('DOMContentLoaded', () => {
   let enemyCell = 99;
   // chickenCell = chicken position
   let chickenCell = null;
+  // timeCell = time boost position
+  let timeCell = null;
   // fartMeter = jimba's fart fuel
   let farts = 10;
-  console.log(farts);
   // score
   let score = 0;
-  console.log(score);
 
   // TIMER
   let count = 60;
@@ -46,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }, 1000);
 
   // MESSAGE
-  message.innerHTML = 'Cropdust king Jimba';
+  message.innerHTML = 'I\'ve had a big dinner today so theres a few farts left in the tank but to get more, eat some chicken! For more time, keep an eye out for the time power ups';
 
   // GENERATE SQUARE
   for (let i=0; i<height*width; i++) {
@@ -70,47 +70,68 @@ window.addEventListener('DOMContentLoaded', () => {
     cells[walls[i]].classList.add('wall');
   }
 
-  // ADD CHICKEN POWERUP TO THE BOARD
-  chickenCell = Math.floor(Math.random() * (height*width));
-  // position cannot be the same as a wall.
-  walls.forEach((wall) => {
-    if (chickenCell === wall) {
-      chickenCell = Math.floor(Math.random() * (height*width));
-    }
-  });
-  cells[chickenCell].classList.add('chicken');
+  // FUNCTION TO GENERATE RANDOM CELL (NOT IN A WALL)
+  function makeRandomCell(className, delay) {
+    window.setTimeout(() => {
+      let randomCell = Math.floor(Math.random() * (height*width));
+      // checks that the random cell doesn't get generated inside a wall.
+      while(walls.includes(randomCell)) {
+        randomCell = Math.floor(Math.random() * (height*width));
+      }
+      cells[randomCell].classList.add(className);
+    }, delay);
+  }
+  // ADD INITIAL TIME POWERUP TO THE BOARD, GENERATES EVERY 10 SECONDS
+  makeRandomCell('time', 10000);
+  // ADD INITIAL CHICKEN TO THE BOARD.
+  makeRandomCell('chicken');
 
   // ADD JIMBA TO BOARD
-  cells[currentCell].classList.add('jimba');
+  cells[currentCell].classList.add('jimba-right');
+  const jimbaFacing = ['right', 'left', 'down', 'up']
   // MAKE JIMBA MOVE & FART -> CAN'T MOVE PAST GRID EDGE & CAN'T MOVE INTO WALLS, MOVE WITH ARROW KEYS OR WASD. PRESS SPACEBAR TO FART.
   window.addEventListener('keydown', (e) => {
-    // stop enemy when it collides with jimba, ADD SAD SIMBA ANIMATION
-    if (currentCell === enemyCell) {
-      farts -= 5;
+    const jimbaMovementConditions = {
+      right: currentCell%width !== width-1 && !cells[currentCell+1].classList.contains('wall'),
+      left: currentCell%width !== 0 && !cells[currentCell-1].classList.contains('wall'),
+      down: currentCell < width*height-width && !cells[currentCell+width].classList.contains('wall'),
+      up: currentCell > width-1 && !cells[currentCell-width].classList.contains('wall')
+    };
+    // FUNCTION TO MOVE JIMBA
+    function moveJimba(conditions, movement) {
+      if (conditions) {
+        currentCell = currentCell + movement;
+      }
+    }
+
+    // first, remove jimba
+    cells[currentCell].classList.remove('jimba-right');
+    // JIMBA MEETS ENEMY LOGIC
+    if (cells[currentCell].classList.contains('enemy')) {
+      if (farts > 0) {
+        farts -= 5;
+        if (farts <= 0) {
+          farts = 0;
+        }
+      }
       collectedFart.style.width = `${farts*2}%`;
-      console.log(farts);
       score -= 5;
       scoreBoard.innerHTML = `Your score is ${score}`;
-      console.log(score);
-      message.innerHTML = 'Oh no! <br>Jimba\'s lost points and energy!';
+      message.innerHTML = 'Oh no! <br> Jimba\'s lost points and energy!';
+      //add sad simba animation
     }
+    // ENEMY MEETS FART LOGIC
     if (cells[enemyCell].classList.contains('fart')) {
-      message.innerHTML = 'SCORE! Fart in all their faces!!';
+      message.innerHTML = 'SCORE! Fart in all the faces!!';
       score++;
       scoreBoard.innerHTML = `Your score is ${score}`;
       console.log(score);
       // add enemy lose animation
     }
-    if (currentCell === chickenCell) {
-      cells[chickenCell].classList.remove('chicken');
-      chickenCell = Math.floor(Math.random() * (height*width));
-      // position cannot be the same as a wall.
-      walls.forEach((wall) => {
-        if (chickenCell === wall) {
-          chickenCell = Math.floor(Math.random() * (height*width));
-        }
-      });
-      cells[chickenCell].classList.add('chicken');
+    // JIMBA MEETS CHICKEN LOGIC
+    if (cells[currentCell].classList.contains('chicken')) {
+      cells[currentCell].classList.remove('chicken');
+      makeRandomCell('chicken', 0);
       if (farts < 50) {
         farts += 5;
         message.innerHTML = 'Yum yum, chicken.';
@@ -123,40 +144,30 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log(farts);
       }
     }
+    // JIMBA MEETS TIME LOGIC
+    if (cells[currentCell].classList.contains('time')) {
+      cells[currentCell].classList.remove('time');
+      count += 10;
+      message.innerHTML = 'Ooooo. Extra time!';
+      makeRandomCell('time', 10000);
+    }
+    // JIMBA MOVES RIGHT
     if (e.keyCode === 39 || e.keyCode === 68) {
-      console.log('right arrow pressed');
-      if(currentCell%width !== width-1 && !cells[currentCell+1].classList.contains('wall')){
-        //add trainsition? move right
-        cells[currentCell].classList.remove('jimba');
-        currentCell += 1;
-        //add transition left to right
-        cells[currentCell].classList.add('jimba');
-      }
+      moveJimba(jimbaMovementConditions.right, 1);
     }
+    // JIMBA MOVES LEFT
     if (e.keyCode === 37 || e.keyCode === 65) {
-      console.log('left arrow pressed');
-      if(currentCell%width !== 0 && !cells[currentCell-1].classList.contains('wall')){
-        cells[currentCell].classList.remove('jimba');
-        currentCell -= 1;
-        cells[currentCell].classList.add('jimba');
-      }
+      moveJimba(jimbaMovementConditions.left, -1);
     }
+    // JIMBA MOVES DOWN
     if (e.keyCode === 40 || e.keyCode === 83) {
-      console.log('down arrow pressed');
-      if (currentCell < width*height-width && !cells[currentCell+width].classList.contains('wall')) {
-        cells[currentCell].classList.remove('jimba');
-        currentCell += width;
-        cells[currentCell].classList.add('jimba');
-      }
+      moveJimba(jimbaMovementConditions.down, width);
     }
+    // JIMBA MOVES UP
     if (e.keyCode === 38 || e.keyCode === 87) {
-      console.log('up arrow pressed');
-      if (currentCell > width-1 && !cells[currentCell-width].classList.contains('wall')) {
-        cells[currentCell].classList.remove('jimba');
-        currentCell -= width;
-        cells[currentCell].classList.add('jimba');
-      }
+      moveJimba(jimbaMovementConditions.up, -width);
     }
+    // JIMBA FARTS
     if (e.keyCode === 32) {
       console.log('spacebar pressed');
       if (farts > 0) {
@@ -169,54 +180,47 @@ window.addEventListener('DOMContentLoaded', () => {
         }, 2000);
       }
     }
+    // put jimba back
+    cells[currentCell].classList.add('jimba-right');
   }, false);
 
   // ADD ENEMY TO THE BOARD
   cells[enemyCell].classList.add('enemy');
   // ALGORITHM TO MOVE ENEMY
-  const enemyFacing = ['right', 'left', 'up', 'down'];
-  let direction = enemyFacing[0]; //initialise at right
-  const enemyTimer = window.setInterval(() => { // stop enemy movement when on the same square as jimba (minus score) or when enemy collides with fart (plus score).
-
+  const enemyFacing = ['right', 'left', 'down', 'up'];
+  let enemyDirection = enemyFacing[Math.floor(Math.random() * enemyFacing.length)]; //initialise at random
+  // FUNCTION FOR ENEMY MOVEMENT
+  function moveEnemy(conditions, movement) {
+    if(conditions) {
+      enemyCell = enemyCell + movement;
+    } else {
+      enemyDirection = enemyFacing[Math.floor(Math.random() * enemyFacing.length)];
+    }
+  }
+  const enemyTimer = window.setInterval(() => {
+    const enemyMovementConditions = {
+      right: enemyCell%width !== width-1 && !cells[enemyCell+1].classList.contains('wall'),
+      left: enemyCell%width !== 0 && !cells[enemyCell-1].classList.contains('wall'),
+      down: enemyCell < width*height-width && !cells[enemyCell+width].classList.contains('wall'),
+      up: enemyCell > width-1 && !cells[enemyCell-width].classList.contains('wall')
+    };
+    cells[enemyCell].classList.remove('enemy');
     // use switch statement to move enemy
-    switch(direction) {
+    switch(enemyDirection) {
       case 'right':
-        if(enemyCell%width !== width-1 && !cells[enemyCell+1].classList.contains('wall')) {
-          cells[enemyCell].classList.remove('enemy');
-          enemyCell += 1;
-          cells[enemyCell].classList.add('enemy');
-        } else {
-          direction = enemyFacing[Math.floor(Math.random() * enemyFacing.length)];
-        }
+        moveEnemy(enemyMovementConditions.right, 1);
         break;
       case 'left':
-        if(enemyCell%width !== 0 && !cells[enemyCell-1].classList.contains('wall')) {
-          cells[enemyCell].classList.remove('enemy');
-          enemyCell -= 1;
-          cells[enemyCell].classList.add('enemy');
-        } else {
-          direction = enemyFacing[Math.floor(Math.random() * enemyFacing.length)];
-        }
+        moveEnemy(enemyMovementConditions.left, -1);
         break;
       case 'down':
-        if(enemyCell < width*height-width && !cells[enemyCell+width].classList.contains('wall')) {
-          cells[enemyCell].classList.remove('enemy');
-          enemyCell += width;
-          cells[enemyCell].classList.add('enemy');
-        } else {
-          direction = enemyFacing[Math.floor(Math.random() * enemyFacing.length)];
-        }
+        moveEnemy(enemyMovementConditions.down, width);
         break;
       case 'up':
-        if(enemyCell > width-1 && !cells[enemyCell-width].classList.contains('wall')) {
-          cells[enemyCell].classList.remove('enemy');
-          enemyCell -= width;
-          cells[enemyCell].classList.add('enemy');
-        } else {
-          direction = enemyFacing[Math.floor(Math.random() * enemyFacing.length)];
-        }
+        moveEnemy(enemyMovementConditions.up, -width);
         break;
     }
+    cells[enemyCell].classList.add('enemy');
   }, 1000);
 
 
@@ -229,7 +233,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // make grid bigger?
   // add title page + definition of cropdusting + story
   // enter konami code to get a full fart boost
-  //
+  // animate simba's movement so it looks like he moves fluidly
 
 
 });
