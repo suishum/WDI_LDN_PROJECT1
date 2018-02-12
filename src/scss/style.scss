@@ -7,6 +7,7 @@
 }
 
 .enemy {
+  // content: url(/images/cool-guy.gif);
   background-image: url(/images/cool-guy.gif);
   background-size: cover;
   z-index: 1;
@@ -24,9 +25,9 @@
   z-index: 1;
 }
 
-.fart:before {
-  opacity: 0.1;
-}
+// .fart:before {
+//   opacity: 0.1;
+// }
 
 .fart {
   background-image: url(/images/fart.gif);
@@ -34,7 +35,7 @@
   // opacity: 1;
   // transition: opacity 2s ease-in-out;
   // background-color: black;
-  animation: fadeInOut 1500ms ease-in-out;
+  // animation: fadeInOut 1500ms ease-in-out;
   // -webkit-animation: fadeInOutGreen 1500ms ease-in-out;
   //    -moz-animation: fadeInOutGreen 1500ms ease-in-out;
   //      -o-animation: fadeInOutGreen 1500ms ease-in-out;
@@ -44,6 +45,18 @@
   // background-size: cover;
   // z-index: 2;
   content: url(/images/jimba-right.gif);
+}
+
+.jimba-left {
+  content: url(/images/jimba-left.gif);
+}
+
+.jimba-down {
+  content: url(/images/jimba-down.gif);
+}
+
+.jimba-up {
+  content: url(/images/jimba-up.gif);
 }
 
 @keyframes fadeInOut {
@@ -71,19 +84,20 @@
 body {
   div.container {
     display: flex;
-    width: 700px; //random number
+    justify-content: center;
+    width: 800px; //random number
     margin: 10px auto;
     div#grid {
       // background-color: #e3e3e3;
-      height: 500px; //50 * js height var
-      width: 500px; // 50 * js wdith var
+      // height: 500px; //50 * js height var
+      // width: 500px; // 50 * js wdith var
       display: flex;
       flex-wrap: wrap;
       margin: 20px;
       div { //individual square styles
         border: 1px solid black;
-        height: 10%;
-        width: 10%;
+        height: 50px;
+        width: 50px;
         display: inline-block;
       }
     }
@@ -92,26 +106,37 @@ body {
       justify-content: flex-start;
       flex-direction: column;
       width: 200px;
+      .timebox {
+        height: 180px;
+        width: 90%;
+        border: 1px solid black;
+        border-radius: 50%;
+        margin: 0 auto;
+        #timer {
+          width: 50%;
+          margin: 0 auto;
+          text-align: center;
+        }
+      }
       #score {
         width:  100%; // 50 * js wdith var
         height: 50px;
         margin: 10px auto;
         border: 1px solid black;
       }
+      #fartMeter {
+        width: 100%; // 50 * js wdith var
+        height: 20px;
+        margin: 10px auto;
+        border: 1px solid black;
+      }
+      #message {
+        width: 100%; // 50 * js wdith var
+        height: 50%;
+        margin: 10px auto;
+        border: 1px solid black;
+      }
     }
-  }
-
-  #fartMeter {
-    width: 700px; // 50 * js wdith var
-    height: 20px;
-    margin: 10px auto;
-    border: 1px solid black;
-  }
-  #message {
-    width: 700px; // 50 * js wdith var
-    height: 50px;
-    margin: 10px auto;
-    border: 1px solid black;
   }
 
 }
