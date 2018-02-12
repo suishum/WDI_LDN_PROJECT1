@@ -2,12 +2,6 @@
   box-sizing: border-box;
 }
 
-.jimba {
-  background-image: url(/images/jimba.gif);
-  background-size: cover;
-  z-index: 2;
-}
-
 .wall {
   background-color: brown;
 }
@@ -22,6 +16,12 @@
   background-image: url(/images/chicken.png);
   background-size: cover;
   z-index: 1;
+}
+
+.jimba {
+  background-image: url(/images/jimba-right.gif);
+  background-size: cover;
+  z-index: 2;
 }
 
 @-webkit-keyframes fadeInOutGreen {
@@ -53,24 +53,42 @@
 }
 
 body {
-  div#grid {
-    // background-color: #e3e3e3;
-    height: 500px; //50 * js height var
-    width: 500px; // 50 * js wdith var
+  div.container {
     display: flex;
-    flex-wrap: wrap;
-    margin: auto;
-    div {
-      border: 1px solid black;
-      height: 10%;
-      width: 10%;
-      display: inline-block;
+    width: 700px; //random number
+    margin: 10px auto;
+    div#grid {
+      // background-color: #e3e3e3;
+      height: 500px; //50 * js height var
+      width: 500px; // 50 * js wdith var
+      display: flex;
+      flex-wrap: wrap;
+      margin: 20px;
+      div { //individual square styles
+        border: 1px solid black;
+        height: 10%;
+        width: 10%;
+        display: inline-block;
+      }
+    }
+    div.information {
+      display: flex;
+      justify-content: flex-start;
+      flex-direction: column;
+      width: 200px;
     }
   }
-  div#fartMeter {
-    width: 500px; // 50 * js wdith var
+
+  #fartMeter {
+    width: 700px; // 50 * js wdith var
     height: 50px;
-    margin: 20px auto;
+    margin: 10px auto;
+    border: 1px solid black;
+  }
+  #score {
+    width:  700px; // 50 * js wdith var
+    height: 50px;
+    margin: 10px auto;
     border: 1px solid black;
   }
 

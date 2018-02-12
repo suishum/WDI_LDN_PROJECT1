@@ -16,6 +16,9 @@ window.addEventListener('DOMContentLoaded', () => {
   const width = 10;
   const grid = document.querySelector('#grid');
   const fartMeter = document.querySelector('#fartMeter');
+  const scoreBoard = document.querySelector('#score');
+  const timer = document.querySelector('#timer');
+  const message = document.querySelector('#message');
   // cells array will get populated with the div's generated
   const cells = [];
   // currentCell = jimba's position
@@ -25,8 +28,25 @@ window.addEventListener('DOMContentLoaded', () => {
   // chickenCell = chicken position
   let chickenCell = null;
   // fartMeter = jimba's fart fuel
-  let farts = 20;
+  let farts = 10;
   console.log(farts);
+  // score
+  let score = 0;
+  console.log(score);
+
+  // TIMER
+  let count = 60;
+  const timerId = setInterval(() => {
+    count--;
+    timer.innerHTML = count;
+    if (count <= 0) {
+      clearInterval(timerId);
+      //END GAME WHEN TIME REACHES 0
+    }
+  }, 1000);
+
+  // MESSAGE
+  message.innerHTML = 'Cropdust king Jimba';
 
   // GENERATE SQUARE
   for (let i=0; i<height*width; i++) {
@@ -38,7 +58,10 @@ window.addEventListener('DOMContentLoaded', () => {
   //GENERATE FART METER
   const div = document.createElement('div');
   const collectedFart = fartMeter.appendChild(div);
-  collectedFart.style.cssText = `background-color: green; height: 100%; width: ${farts}%`;
+  collectedFart.style.cssText = `background-color: green; height: 100%; width: ${farts*2}%`;
+
+  // GENERATE SCOREBOARD
+  scoreBoard.innerHTML = `Your score is ${score}`;
 
   // GENERATE WALLS
   // turn into wallDictionary later
@@ -63,14 +86,20 @@ window.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('keydown', (e) => {
     // stop enemy when it collides with jimba, ADD SAD SIMBA ANIMATION
     if (currentCell === enemyCell) {
-      clearInterval(enemyTimer);
-      console.log('jimba loses ):');
-      //END GAME or REDUCE LIFE COUNTER or REDUCE FARTMETER
+      farts -= 5;
+      collectedFart.style.width = `${farts*2}%`;
+      console.log(farts);
+      score -= 5;
+      scoreBoard.innerHTML = `Your score is ${score}`;
+      console.log(score);
+      message.innerHTML = 'Oh no! <br>Jimba\'s lost points and energy!';
     }
     if (cells[enemyCell].classList.contains('fart')) {
-      clearInterval(enemyTimer);
-      console.log('enemy succesfully farted on');
-      // add enemy lose animation + add to score
+      message.innerHTML = 'SCORE! Fart in all their faces!!';
+      score++;
+      scoreBoard.innerHTML = `Your score is ${score}`;
+      console.log(score);
+      // add enemy lose animation
     }
     if (currentCell === chickenCell) {
       cells[chickenCell].classList.remove('chicken');
@@ -82,13 +111,15 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       });
       cells[chickenCell].classList.add('chicken');
-      if (farts < 100) {
+      if (farts < 50) {
         farts += 5;
-        if (farts >= 100) {
-          farts = 100;
+        message.innerHTML = 'Yum yum, chicken.';
+        if (farts >= 50) {
+          farts = 50;
+          message.innerHTML = 'The fartmeter is maxed out!';
           collectedFart.style.width = '100%';
         }
-        collectedFart.style.width = `${farts}%`;
+        collectedFart.style.width = `${farts*2}%`;
         console.log(farts);
       }
     }
@@ -130,7 +161,7 @@ window.addEventListener('DOMContentLoaded', () => {
       console.log('spacebar pressed');
       if (farts > 0) {
         farts--;
-        collectedFart.style.width = `${farts}%`;
+        collectedFart.style.width = `${farts*2}%`;
         const fartCell = cells[currentCell];
         fartCell.classList.add('fart');
         window.setTimeout(() => {
