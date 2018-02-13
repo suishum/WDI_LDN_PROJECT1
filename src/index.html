@@ -4,31 +4,52 @@
     <meta charset="utf-8">
     <title>WDI Project 1: JavaScript Game</title>
     <script src="/js/app.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/style.css">
   </head>
   <body>
-    <h1>Jimba, The Cropdusting Canine</h1>
-    <div class="container">
-      <div id="grid">
+    <div class="intro-page">
+      <h1>Jimba, The Cropdusting Pug</h1>
+      <h4>CROP DUSTING</h4>
+      <p>Passing gas in a stealth manner, usually while walking through a crowd or a group, so that someone else gets blamed for the stench, or at the very least people besides the assailant must suffer it.</p>
+      <h4>INSTRUCTIONS</h4>
+      <p>Use W A S D or <i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> <i class="fa fa-arrow-left"></i> <i class="fa fa-arrow-right"></i> keys to move.</p>
+      <p>Collect chicken for more energy</p>
+      <p>Collect clocks for a time boost</p>
+      <button class="goBtn">GO!</button>
+    </div>
+    <div class="game-container hidden">
+      <h1>Jimba, The Cropdusting Pug</h1>
+        <div class="container">
+        <div id="grid">
 
-      </div>
-      <div class="information">
-        <div class="timebox">
-          <div id="timer">
+        </div>
+        <div class="information">
+          <div class="timebox">
+            <div id="timer">
+              60
+            </div>
+          </div>
+          <div id="score">
+
+          </div>
+          <div id="fartMeter">
+            <div id="collectedFart">
+
+            </div>
+          </div>
+          <div id="message">
             -
           </div>
         </div>
-        <div id="score">
-
-        </div>
-        <div id="fartMeter">
-
-        </div>
-        <div id="message">
-          -
-        </div>
       </div>
     </div>
-
+    <div class="game-over hidden">
+      <h1>GAME OVER</h1>
+      <div>
+        <h2 id="winMessage"></h2>
+        <button class="retryBtn">PLAY AGAIN?</button>
+      </div>
+    </div>
   </body>
 </html>

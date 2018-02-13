@@ -25,6 +25,8 @@
   z-index: 1;
 }
 
+// background blend
+
 // .fart:before {
 //   opacity: 0.1;
 // }
@@ -80,12 +82,36 @@
 //   100% { background-color: #FFFFFF; }
 // }
 
+div.hidden {
+  display: none;
+}
 
 body {
-  div.container {
+  .intro-page {
+    border: 1px solid black;
+    text-align: center;
+    width: 800px; //random number, must be same as game container
+    margin: 100px auto;
+    padding: 20px;
+  }
+  button {
+    padding: 10px;
+    width: 600px;
+    border-radius: 10px;
+    margin: 20px;
+  }
+  h1 {
+    border: 1px solid black;
+    width: 700px;
+    padding: 50px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .container {
+    border: 1px solid black;
     display: flex;
     justify-content: center;
-    width: 800px; //random number
+    width: 800px; //random number, must be same as intro page
     margin: 10px auto;
     div#grid {
       // background-color: #e3e3e3;
@@ -138,5 +164,17 @@ body {
       }
     }
   }
+  .game-over {
+    div {
+      border: 1px solid black;
+      text-align: center;
+      width: 800px; //random number, must be same as game container
+      margin: 100px auto;
+      padding: 20px;
+    }
+  }
+}
 
+div.hidden {
+  display: none;
 }
