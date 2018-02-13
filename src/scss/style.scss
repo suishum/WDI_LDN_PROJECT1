@@ -6,6 +6,17 @@
   background-color: brown;
 }
 
+.fart {
+  background-image: url(/images/fart.gif);
+  background-size: cover;
+  // opacity: 1;
+  // transition: opacity 2s ease-in-out;
+  // background-color: black;
+  // animation: fadeInOut 1500ms ease-in-out;
+  // -webkit-animation: fadeInOutGreen 1500ms ease-in-out;
+  //    -moz-animation: fadeInOutGreen 1500ms ease-in-out;
+  //      -o-animation: fadeInOutGreen 1500ms ease-in-out;
+}
 .enemy {
   // content: url(/images/cool-guy.gif);
   background-image: url(/images/cool-guy.gif);
@@ -31,17 +42,6 @@
 //   opacity: 0.1;
 // }
 
-.fart {
-  background-image: url(/images/fart.gif);
-  background-size: cover;
-  // opacity: 1;
-  // transition: opacity 2s ease-in-out;
-  // background-color: black;
-  // animation: fadeInOut 1500ms ease-in-out;
-  // -webkit-animation: fadeInOutGreen 1500ms ease-in-out;
-  //    -moz-animation: fadeInOutGreen 1500ms ease-in-out;
-  //      -o-animation: fadeInOutGreen 1500ms ease-in-out;
-}
 .jimba-right {
   // background-image: url(/images/jimba-right.gif);
   // background-size: cover;
@@ -155,6 +155,10 @@ body {
         height: 20px;
         margin: 10px auto;
         border: 1px solid black;
+        #collectedFart {
+          background-color: green;
+          height: 100%;
+        }
       }
       #message {
         width: 100%; // 50 * js wdith var
