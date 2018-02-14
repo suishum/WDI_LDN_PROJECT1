@@ -1,86 +1,38 @@
 * {
   box-sizing: border-box;
+  font-family: 'Press Start 2P', cursive;
 }
 
-.wall {
-  background-color: brown;
-}
-
-.fart {
-  background-image: url(/images/fart.gif);
-  background-size: cover;
-  // opacity: 1;
-  // transition: opacity 2s ease-in-out;
-  // background-color: black;
-  // animation: fadeInOut 1500ms ease-in-out;
-  // -webkit-animation: fadeInOutGreen 1500ms ease-in-out;
-  //    -moz-animation: fadeInOutGreen 1500ms ease-in-out;
-  //      -o-animation: fadeInOutGreen 1500ms ease-in-out;
-}
-.enemy {
-  // content: url(/images/cool-guy.gif);
-  background-image: url(/images/cool-guy.gif);
-  background-size: cover;
-  z-index: 1;
-}
-
-.chicken {
-  background-image: url(/images/chicken.png);
-  background-size: cover;
-  z-index: 1;
-}
-
-.time {
-  background-image: url(/images/timeboost.png);
-  background-size: cover;
-  z-index: 1;
-}
-
-// background blend
-
-// .fart:before {
-//   opacity: 0.1;
-// }
-
-.jimba-right {
-  // background-image: url(/images/jimba-right.gif);
-  // background-size: cover;
-  // z-index: 2;
-  content: url(/images/jimba-right.gif);
-}
-
-.jimba-left {
-  content: url(/images/jimba-left.gif);
-}
-
-.jimba-down {
-  content: url(/images/jimba-down.gif);
-}
-
-.jimba-up {
-  content: url(/images/jimba-up.gif);
-}
 
 @keyframes fadeInOut {
   0%   { background-color: rgba(255, 255, 255, 0); }
   50%  { background-color: rgba(255, 255, 255, 1); }
   100% { background-color: rgba(255, 255, 255, 0); }
 }
-// @-webkit-keyframes fadeInOutGreen {
-//   0%   { background-color: #FFFFFF; }
-//   50%  { background-color: green; }
-//   100% { background-color: #FFFFFF; }
-// }
-// @-moz-keyframes fadeInOutGreen {
-//   0%   { background-color: #FFFFFF; }
-//   50%  { background-color: green; }
-//   100% { background-color: #FFFFFF; }
-// }
-// @-o-keyframes fadeInOutGreen {
-//   0%   { background-color: #FFFFFF; }
-//   50%  { background-color: green; }
-//   100% { background-color: #FFFFFF; }
-// }
+
+@keyframes pulse {
+  0%   { font-size: 16px; }
+  50%  { font-size: 20px; }
+  100% { font-size: 16px; }
+}
+
+.pulse {
+  animation: pulse 1000ms ease-in-out;
+}
+
+@keyframes greenJump {
+  0%   { transform: translate(16px, -21px); }
+  50%  { transform: translate(16px, -31px); }
+  100% { transform: translate(16px, -21px); }
+}
+
+.greenJump {
+  color: green;
+  width: 40px;
+  position: absolute;
+  animation: greenJump 1000ms linear;
+}
+
 
 div.hidden {
   display: none;
@@ -91,7 +43,7 @@ body {
     border: 1px solid black;
     text-align: center;
     width: 800px; //random number, must be same as game container
-    margin: 100px auto;
+    margin: 50px auto;
     padding: 20px;
   }
   button {
@@ -117,11 +69,15 @@ body {
       // background-color: #e3e3e3;
       // height: 500px; //50 * js height var
       // width: 500px; // 50 * js wdith var
+      background-image: url(/images/floor.png);
+      background-size: 50px;
       display: flex;
       flex-wrap: wrap;
       margin: 20px;
       div { //individual square styles
-        border: 1px solid black;
+        // background-image: url(/images/09Floor.png);
+        // background-size: cover;
+        // border: 1px solid black;
         height: 50px;
         width: 50px;
         display: inline-block;
@@ -145,8 +101,9 @@ body {
         }
       }
       #score {
-        width:  100%; // 50 * js wdith var
-        height: 50px;
+        width:  40px; // 50 * js wdith var
+        height: 20px;
+        padding: 20px;
         margin: 10px auto;
         border: 1px solid black;
       }
@@ -165,6 +122,7 @@ body {
         height: 50%;
         margin: 10px auto;
         border: 1px solid black;
+        font-size: 16px;
       }
     }
   }
@@ -181,4 +139,73 @@ body {
 
 div.hidden {
   display: none;
+}
+
+div.wall {
+  background-image: url(/images/walls/solo1.png);
+  background-size: cover;
+}
+
+div.fart {
+  background-image: url(/images/fart.gif);
+  background-size: cover;
+}
+
+div.enemy-right {
+  content: url(/images/enemy-right.gif);
+  // background-size: cover;
+}
+
+div.enemy-left {
+  content: url(/images/enemy-left.gif);
+  // background-size: cover;
+}
+
+div.enemy-down {
+  content: url(/images/enemy-down.gif);
+  // background-size: cover;
+}
+
+div.enemy-up {
+  content: url(/images/enemy-up.gif);
+  // background-size: cover;
+}
+
+div.chicken {
+  background-image: url(/images/chicken.gif);
+  background-size: cover;
+  z-index: 1;
+}
+
+div.time {
+  background-image: url(/images/time.gif);
+  background-size: cover;
+  z-index: 1;
+}
+
+
+
+// background blend
+
+// .fart:before {
+//   opacity: 0.1;
+// }
+
+div.jimba-right {
+  // background-image: url(/images/jimba-right.gif);
+  // background-size: cover;
+  // z-index: 2;
+  content: url(/images/jimba-right.gif);
+}
+
+div.jimba-left {
+  content: url(/images/jimba-left.gif);
+}
+
+div.jimba-down {
+  content: url(/images/jimba-down.gif);
+}
+
+div.jimba-up {
+  content: url(/images/jimba-up.gif);
 }
