@@ -11,26 +11,43 @@
 }
 
 @keyframes pulse {
-  0%   { font-size: 16px; }
-  50%  { font-size: 20px; }
-  100% { font-size: 16px; }
+  0%   { font-size: 100%; }
+  50%  { font-size: 150%; }
+  100% { font-size: 100%; }
 }
 
 .pulse {
   animation: pulse 1000ms ease-in-out;
 }
 
-@keyframes greenJump {
-  0%   { transform: translate(16px, -21px); }
+@keyframes jump {
+  0%   { transform: translate(16px, -31px); }
+  25%  { transform: translate(16px, -36px); };
   50%  { transform: translate(16px, -31px); }
-  100% { transform: translate(16px, -21px); }
+  75%  { transform: translate(16px, -26px); }
+  100% { transform: translate(16px, -31px); }
 }
 
 .greenJump {
   color: green;
   width: 40px;
   position: absolute;
-  animation: greenJump 1000ms linear;
+  animation: jump 1000ms linear;
+}
+
+@keyframes shake {
+  0%   { transform: translate(16px, -31px); }
+  25%  { transform: translate(11px, -31px); };
+  50%  { transform: translate(16px, -31px); }
+  75%  { transform: translate(21px, -31px); }
+  100% { transform: translate(16px, -31px); }
+}
+
+.redShake {
+  color: red;
+  width: 40px;
+  position: absolute;
+  animation: shake 1000ms linear;
 }
 
 
@@ -46,6 +63,11 @@ body {
     margin: 50px auto;
     padding: 20px;
   }
+  .game-container {
+    border: 1px solid black;
+    margin: 50px auto;
+    width: 800px;
+  }
   button {
     padding: 10px;
     width: 600px;
@@ -55,7 +77,7 @@ body {
   h1 {
     border: 1px solid black;
     width: 700px;
-    padding: 50px;
+    padding: 20px;
     margin: 0 auto;
     text-align: center;
   }
@@ -71,12 +93,12 @@ body {
       // width: 500px; // 50 * js wdith var
       background-image: url(/images/floor.png);
       background-size: 50px;
+      border-radius: 10px;
+      // border: 3px solid #e3e3e3; //fucks the grid
       display: flex;
       flex-wrap: wrap;
       margin: 20px;
       div { //individual square styles
-        // background-image: url(/images/09Floor.png);
-        // background-size: cover;
         // border: 1px solid black;
         height: 50px;
         width: 50px;
@@ -91,13 +113,15 @@ body {
       .timebox {
         height: 180px;
         width: 90%;
-        border: 1px solid black;
+        // border: 1px solid black;
         border-radius: 50%;
         margin: 0 auto;
         #timer {
           width: 50%;
           margin: 0 auto;
           text-align: center;
+          font-size: 50px;
+          transform: translateY(68px);
         }
       }
       #score {
@@ -105,12 +129,12 @@ body {
         height: 20px;
         padding: 20px;
         margin: 10px auto;
-        border: 1px solid black;
+        // border: 1px solid black;
       }
       #fartMeter {
         width: 100%; // 50 * js wdith var
         height: 20px;
-        margin: 10px auto;
+        margin: 20px auto;
         border: 1px solid black;
         #collectedFart {
           background-color: green;
@@ -120,8 +144,8 @@ body {
       #message {
         width: 100%; // 50 * js wdith var
         height: 50%;
-        margin: 10px auto;
-        border: 1px solid black;
+        margin: 50px auto;
+        // border: 1px solid black;
         font-size: 16px;
       }
     }
@@ -142,7 +166,7 @@ div.hidden {
 }
 
 div.wall {
-  background-image: url(/images/walls/solo1.png);
+  background-image: url(/images/walls/solo.png);
   background-size: cover;
 }
 

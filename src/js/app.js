@@ -31,6 +31,15 @@ let score = 0;
 // turn into wallDictionary later
 const walls = [2, 12, 15, 16, 17, 22, 47, 48, 49, 51, 52, 53, 77, 83, 87, 93, 97];
 
+// const wallsDictionary = {
+//   {
+//     vt: [2, 77, 83],
+//     vm: [12, 87, 93],
+//     hl: [15, 47, 51],
+//
+//   }
+// };
+
 // GLOBAL FUNCTIONS
 // FUNCTION TO MAKE RANDOM CELL (NOT IN A WALL)
 function makeRandomCell(className, delay) {
@@ -44,19 +53,11 @@ function makeRandomCell(className, delay) {
   }, delay);
 }
 
-function pulseHTML(selector, messageAsString, delay) {
-  selector.classList.add('pulse');
+function animateHTML(selector, classAsString, messageAsString, delay) {
+  selector.classList.add(classAsString);
   selector.innerHTML = messageAsString;
   window.setTimeout(() => {
-    selector.classList.remove('pulse');
-  }, delay);
-}
-
-function greenJumpHTML(selector, messageAsString, delay) {
-  selector.classList.add('greenJump');
-  selector.innerHTML = messageAsString;
-  window.setTimeout(() => {
-    selector.classList.remove('greenJump');
+    selector.classList.remove(classAsString);
   }, delay);
 }
 
@@ -85,7 +86,7 @@ window.addEventListener('DOMContentLoaded', () => {
           timerObj.startTime --;
           timerObj.timeElapsed ++;
           console.log(`timeelapsed: ${timerObj.timeElapsed}`);
-          pulseHTML(timer, timerObj.startTime, 800);
+          animateHTML(timer, 'pulse', timerObj.startTime, 800);
         } else if (timerObj.startTime === 0) {
           clearInterval(timerId);
           endGame();
@@ -133,14 +134,13 @@ window.addEventListener('DOMContentLoaded', () => {
     makeRandomCell('chicken');
     // SCOREBOARD
     score = 0;
-    pulseHTML(scoreBoard, `${score}`, 1000);
+    animateHTML(scoreBoard, 'pulse', `${score}`, 1000);
     // scoreBoard.innerHTML = `${score}`;
     // FARTMETER
     farts = 10;
     collectedFart.style.cssText = `width: ${farts*2}%`;
     // INITIAL MESSAGE
-    pulseHTML(message, 'It\'s poopin\' time', 1000);
-    // message.innerHTML = 'It\'s poopin\' time';
+    animateHTML(message, 'pulse', 'It\'s poopin\' time', 1000);
     gameContainer.classList.remove('hidden');
     introPage.classList.add('hidden');
     gameOver.classList.add('hidden');
@@ -150,9 +150,9 @@ window.addEventListener('DOMContentLoaded', () => {
     grid.innerHTML = '';
     cells = [];
     clearInterval(enemyTimer);
-    if (timerObj.timeElapsed >= 100) {
-      clearInterval(enemyTimer2);
-    }
+    // if (timerObj.timeElapsed >= 100) {
+    //   clearInterval(enemyTimer2);
+    // } //SECOND ENEMY DOES NOT WORK YET
     // // TO CLEAR THE BOARD OF ALL CLASSES EXCEPT EXISTING WALLS
     // cells.forEach((cell, index) => {
     //   cell.className = walls.includes(index) ? 'wall' : '';
@@ -162,17 +162,17 @@ window.addEventListener('DOMContentLoaded', () => {
     gameOver.classList.remove('hidden');
     // winMessage.innerHTML = `FABULOUS! YOU SCORED ${score}!`;
     if (score <= 0) {
-      winMessage.innerHTML = `Your score was ${score}! Did you even try?`;
+      winMessage.innerHTML = `Your score was ${score}! <br> Did you even try?`;
     } else if (score < 10) {
-      winMessage.innerHTML = `Your score was ${score}! Mehhh`;
+      winMessage.innerHTML = `Your score was ${score}! <br> Mehhh`;
     } else if (score < 30) {
-      winMessage.innerHTML = `Your score was ${score}! Alright maaate, not bad!`;
+      winMessage.innerHTML = `Your score was ${score}! <br> Alright maaate, not bad!`;
     } else if (score < 50) {
-      winMessage.innerHTML = `Your score was ${score}! Amazing!`;
+      winMessage.innerHTML = `Your score was ${score}! <br> Amazing!`;
     } else if (score < 100) {
-      winMessage.innerHTML = `Your score was ${score}! Teach me your ways!`;
+      winMessage.innerHTML = `Your score was ${score}! <br> Teach me your ways!`;
     } else {
-      winMessage.innerHTML = `Your score was ${score}! U R A DUSTCROPPING MASTER!!!!!!!!!!`;
+      winMessage.innerHTML = `Your score was ${score}! <br> U R A DUSTCROPPING MASTER!!!!!!!!!!`;
     }
   }
 
@@ -288,11 +288,10 @@ window.addEventListener('DOMContentLoaded', () => {
       makeRandomCell('chicken', 2000);
       if (farts < 50) {
         farts += 5;
-        pulseHTML(message, 'Yum yum, chicken.', 1000);
+        animateHTML(message, 'pulse', 'Yum yum, chicken.', 1000);
         if (farts >= 50) {
           farts = 50;
-          pulseHTML(message, 'The fartmeter is maxed out!', 1000);
-          // message.innerHTML = 'The fartmeter is maxed out!';
+          animateHTML(message, 'pulse', 'The fartmeter is maxed out!', 1000);
           collectedFart.style.width = '100%';
         }
         collectedFart.style.width = `${farts*2}%`;
@@ -304,7 +303,7 @@ window.addEventListener('DOMContentLoaded', () => {
       cells[currentCell].classList.remove('time');
       timerObj.startTime += 10;
       console.log('Time boosted by 10s');
-      pulseHTML(message, 'Ooooo. Extra <br> time!', 1000);
+      animateHTML(message, 'pulse', 'Ooooo. Extra <br> time!', 1000);
       makeRandomCell('time', 10000);
     }
     // JIMBA MEETS ENEMY LOGIC
@@ -319,29 +318,16 @@ window.addEventListener('DOMContentLoaded', () => {
       score -= 5;
       if (score < -99) {
         endGame();
-        // clearInterval(timerId); // FIX THIS
-        // winMessage.innerHTML = `STOP! STOP! YOU SCORED ${score}, ARE YOU EVEN TRYING?`;
-        // retry.innerHTML = 'Play again? But like, seriously this time.'
-        // // RESET BOARD
-        // grid.innerHTML = '';
-        // score = 0;
-        // farts = 10;
-        // gameContainer.classList.add('hidden');
-        // gameOver.classList.remove('hidden');
       }
-      // ADD RED ANIMATION
-      scoreBoard.innerHTML = `${score}`;
-      pulseHTML(message, 'Oh no! <br> Jimba\'s lost points and energy!', 1000);
-      // message.innerHTML = 'Oh no! <br> Jimba\'s lost points and energy!';
+      animateHTML(scoreBoard, 'redShake', `${score}`, 1000);
+      animateHTML(message, 'pulse', 'Oh no! <br> Jimba\'s lost points and energy!', 1000);
       //add sad simba animation
     }
     // ENEMY MEETS FART LOGIC
     if (cells[enemyCell].classList.contains('fart')) {
-      pulseHTML(message, 'SCORE! Fart in all the faces!!', 1000);
-      // message.innerHTML = 'SCORE! Fart in all the faces!!';
+      animateHTML(message, 'pulse', 'SCORE! Fart in all the faces!!', 1000);
       score++;
-      greenJumpHTML(scoreBoard, `${score}`, 1000);
-      // scoreBoard.innerHTML = `${score}`;
+      animateHTML(scoreBoard, 'greenJump', `${score}`, 1000);
       console.log(score);
       // add enemy lose animation
     }
@@ -358,9 +344,10 @@ window.addEventListener('DOMContentLoaded', () => {
     } else if (timerObj.timeElapsed === 80){
       clearInterval(enemyTimer);
       enemyTimer = window.setInterval(enemyAI, 200);
-    } else if (timerObj.timeElapsed === 100) {
-      enemyTimer2 = window.setInterval(enemyAI, 200);
     }
+    // else if (timerObj.timeElapsed === 100) {
+    //   enemyTimer2 = window.setInterval(enemyAI, 200);
+    // }
     // LASTLY, put jimba back
     cells[currentCell].classList.add(`jimba-${jimbaDirection}`);
   }, false);
