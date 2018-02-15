@@ -1,6 +1,16 @@
 * {
   box-sizing: border-box;
   font-family: 'Press Start 2P', cursive;
+  hr {
+    // color: black;
+  }
+}
+
+body .container #grid.danger {
+  background: red;
+  background-image: url(/images/floor.png);
+  background-size: 50px;
+  background-blend-mode: color-dodge;
 }
 
 
@@ -11,13 +21,23 @@
 }
 
 @keyframes pulse {
-  0%   { font-size: 100%; }
-  50%  { font-size: 150%; }
-  100% { font-size: 100%; }
+  0%   { font-size: 18px; }
+  50%  { font-size: 22px; }
+  100% { font-size: 18px; }
 }
 
 .pulse {
   animation: pulse 1000ms ease-in-out;
+}
+
+@keyframes timerPulse {
+  0%   { font-size: 50px; }
+  50%  { font-size: 60px; }
+  100% { font-size: 50px; }
+}
+
+.timerPulse {
+  animation: timerPulse 1000ms ease-in-out;
 }
 
 @keyframes jump {
@@ -56,45 +76,82 @@ div.hidden {
 }
 
 body {
+  // background-image: url(/images/grass.jpg);
   .intro-page {
     border: 1px solid black;
     text-align: center;
     width: 800px; //random number, must be same as game container
-    margin: 50px auto;
+    margin: 30px auto;
     padding: 20px;
+    background-color: #FFE977;
+    border-radius: 20px;
+    .intro-container {
+      display: flex;
+      img {
+        margin: 50px 20px 20px 30px;
+        padding: 10px;
+      }
+      h4 {
+        padding-top: 10px;
+        padding-bottom: 0;
+      }
+    }
+    .how-to {
+      padding-top: 10px;
+    }
+    p {
+      font-size: 14px;
+    }
+    button {
+      padding: 50px 30px;
+      width: 150px;
+      border-radius: 10px;
+      margin: 0 auto 20px;
+      font-size: 32px;
+      background-color: #A1C502;
+      color: white;
+      border: 1px solid black;
+    }
   }
   .game-container {
     border: 1px solid black;
-    margin: 50px auto;
+    margin: 30px auto;
     width: 800px;
-  }
-  button {
-    padding: 10px;
-    width: 600px;
-    border-radius: 10px;
-    margin: 20px;
+    padding: 20px;
+    background-color: #FFE977;
+    border-radius: 20px;
+    h1 {
+      padding: 20px 20px 10px 20px;
+    }
   }
   h1 {
-    border: 1px solid black;
+    // border: 1px solid black;
     width: 700px;
-    padding: 20px;
+    padding: 20px 20px 10px 20px;
     margin: 0 auto;
     text-align: center;
   }
+  h2 {
+    text-align: center;
+  }
   .container {
-    border: 1px solid black;
+    // border: 1px solid black;
     display: flex;
     justify-content: center;
-    width: 800px; //random number, must be same as intro page
-    margin: 10px auto;
-    div#grid {
+    width: 100%; //random number, must be same as intro page
+    margin: 0 auto;
+    padding: 0;
+    #grid {
       // background-color: #e3e3e3;
       // height: 500px; //50 * js height var
       // width: 500px; // 50 * js wdith var
-      background-image: url(/images/floor.png);
-      background-size: 50px;
+      background: #84C366;
+      background-image: url(/images/grass.png);
+      background-size: cover;
+      background-blend-mode: lighten;
+      // opacity: 0.5;
       border-radius: 10px;
-      // border: 3px solid #e3e3e3; //fucks the grid
+      border: 1px solid black; //fucks the grid
       display: flex;
       flex-wrap: wrap;
       margin: 20px;
@@ -110,53 +167,100 @@ body {
       justify-content: flex-start;
       flex-direction: column;
       width: 200px;
+      transform: translate(-5px, 20px);
+      p {
+        font-size: 14px;
+      }
       .timebox {
         height: 180px;
         width: 90%;
-        // border: 1px solid black;
+        border: 1px solid black;
         border-radius: 50%;
         margin: 0 auto;
+        background-color: #29A7FF;
         #timer {
           width: 50%;
           margin: 0 auto;
           text-align: center;
           font-size: 50px;
           transform: translateY(68px);
+          color: white;
         }
       }
-      #score {
-        width:  40px; // 50 * js wdith var
-        height: 20px;
-        padding: 20px;
-        margin: 10px auto;
-        // border: 1px solid black;
+      .score-board {
+        transform: translateY(20px);
+        #score {
+          width:  40px; // 50 * js wdith var
+          height: 20px;
+          padding: 0;
+          margin: 10px auto;
+          // border: 1px solid black;
+        }
       }
-      #fartMeter {
-        width: 100%; // 50 * js wdith var
-        height: 20px;
-        margin: 20px auto;
-        border: 1px solid black;
-        #collectedFart {
-          background-color: green;
-          height: 100%;
+      .fart-stuff {
+        transform: translateY(15px);
+        #fartMeter {
+          width: 100%; // 50 * js wdith var
+          height: 20px;
+          margin: 20px auto;
+          background-color: white;
+          border: 1px solid black;
+          border-radius: 10px;
+          transform: translateY(-15px);
+          #collectedFart {
+            background-color: #A1C502;
+            height: 100%;
+            border-radius: 10px;
+          }
         }
       }
       #message {
         width: 100%; // 50 * js wdith var
         height: 50%;
-        margin: 50px auto;
+        margin: 20px auto;
         // border: 1px solid black;
-        font-size: 16px;
+        font-size: 18px;
+        text-align: center;
+        transform: translateY(15px);
       }
     }
   }
   .game-over {
-    div {
-      border: 1px solid black;
+    border: 1px solid black;
+    width: 800px; //random number, must be same as intro page
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #FFE977;
+    border-radius: 20px;
+    h1 {
+      // border: 1px solid black;
+      width: 100%;
+      padding: 60px 20px 40px 20px;
+      margin: 0 auto;
       text-align: center;
-      width: 800px; //random number, must be same as game container
-      margin: 100px auto;
+    }
+    div {
+      // border: 1px solid black;
+      text-align: center;
+      width: 100%; //random number, must be same as game container
+      margin: 50px auto;
       padding: 20px;
+      h2 {
+        padding: 20px;
+      }
+      button {
+        padding: 50px 30px;
+        width: 500px;
+        border-radius: 10px;
+        margin: 0 auto 20px;
+        font-size: 32px;
+        background-color: #A1C502;
+        color: white;
+        border: 1px solid black;
+      }
+    }
+    p {
+      text-align: center;
     }
   }
 }
@@ -170,9 +274,102 @@ div.wall {
   background-size: cover;
 }
 
+div {
+  .bc {
+    background-image: url(/images/walls/bc.png);
+    background-size: cover;
+  }
+  .blc {
+    background-image: url(/images/walls/blc.png);
+    background-size: cover;
+  }
+  .brc {
+    background-image: url(/images/walls/brc.png);
+    background-size: cover;
+  }
+  .ct {
+    background-image: url(/images/walls/ct.png);
+    background-size: cover;
+  }
+  .hl {
+    background-image: url(/images/walls/hl.png);
+    background-size: cover;
+  }
+  .hm {
+    background-image: url(/images/walls/hm.png);
+    background-size: cover;
+  }
+  .hr {
+    background-image: url(/images/walls/hr.png);
+    background-size: cover;
+  }
+  .lc {
+    background-image: url(/images/walls/lc.png);
+    background-size: cover;
+  }
+  .rc {
+    background-image: url(/images/walls/rc.png);
+    background-size: cover;
+  }
+  .solo {
+    background-image: url(/images/walls/solo.png);
+    background-size: cover;
+  }
+  .solosq {
+    background-image: url(/images/walls/solosq.png);
+    background-size: cover;
+  }
+  .sq {
+    background-image: url(/images/walls/sq.png);
+    background-size: cover;
+  }
+  .tlc {
+    background-image: url(/images/walls/tlc.png);
+    background-size: cover;
+  }
+  .trc {
+    background-image: url(/images/walls/trc.png);
+    background-size: cover;
+  }
+  .vb {
+    background-image: url(/images/walls/vb.png);
+    background-size: cover;
+  }
+  .vm {
+    background-image: url(/images/walls/vm.png);
+    background-size: cover;
+  }
+  .vt {
+    background-image: url(/images/walls/vt.png);
+    background-size: cover;
+  }
+}
+
+
+
 div.fart {
   background-image: url(/images/fart.gif);
   background-size: cover;
+}
+
+div.crazydog-right {
+  content: url(/images/crazydog-right.gif);
+  // background-size: cover;
+}
+
+div.crazydog-left {
+  content: url(/images/crazydog-left.gif);
+  // background-size: cover;
+}
+
+div.crazydog-down {
+  content: url(/images/crazydog-down.gif);
+  // background-size: cover;
+}
+
+div.crazydog-up {
+  content: url(/images/crazydog-up.gif);
+  // background-size: cover;
 }
 
 div.enemy-right {
@@ -207,18 +404,7 @@ div.time {
   z-index: 1;
 }
 
-
-
-// background blend
-
-// .fart:before {
-//   opacity: 0.1;
-// }
-
 div.jimba-right {
-  // background-image: url(/images/jimba-right.gif);
-  // background-size: cover;
-  // z-index: 2;
   content: url(/images/jimba-right.gif);
 }
 

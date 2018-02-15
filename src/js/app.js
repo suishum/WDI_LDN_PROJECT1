@@ -23,22 +23,33 @@ let jimbaDirection = 'right';
 let enemyCell = 99;
 let enemyDirection = 'right'; //initialise at right
 let enemyTimer = null;
-let enemyTimer2 = null;
-// fartMeter = jimba's fart fuel (STARTS AT 10)
-let farts = 10;
+// fartMeter = jimba's fart fuel (STARTS AT 15)
+let farts = 15;
 // score
 let score = 0;
 // turn into wallDictionary later
-const walls = [2, 12, 15, 16, 17, 22, 47, 48, 49, 51, 52, 53, 77, 83, 87, 93, 97];
-
-// const wallsDictionary = {
-//   {
-//     vt: [2, 77, 83],
-//     vm: [12, 87, 93],
-//     hl: [15, 47, 51],
-//
-//   }
-// };
+let walls = [];
+// Maps
+const wallsDictionary = [{
+  bc: null,
+  blc: null,
+  brc: null,
+  ct: null,
+  hl: [15, 47, 51],
+  hm: [16, 48, 52],
+  hr: [17, 49, 53],
+  lc: null,
+  rc: null,
+  solo: null,
+  tlc: null,
+  trc: null,
+  vb: [22, 87, 93],
+  vm: [12],
+  vt: [2, 77, 83]
+}];
+let randomMap = Math.floor(Math.random() * wallsDictionary.length);
+// Pick out the different wall types
+const wallTypes = Object.keys(wallsDictionary[randomMap]);
 
 // GLOBAL FUNCTIONS
 // FUNCTION TO MAKE RANDOM CELL (NOT IN A WALL)
@@ -61,6 +72,10 @@ function animateHTML(selector, classAsString, messageAsString, delay) {
   }, delay);
 }
 
+function hasAWall(value) {
+  return wallTypes.some(wallType => value.contains(wallType));
+}
+
 
 window.addEventListener('DOMContentLoaded', () => {
   // INTRO & END PAGE VARIABLES
@@ -73,6 +88,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // GAME VARIABLES
   const grid = document.querySelector('#grid');
   const scoreBoard = document.querySelector('#score');
+  const timeBox = document.querySelector('.timebox');
   const timer = document.querySelector('#timer');
   const message = document.querySelector('#message');
   const collectedFart = document.querySelector('#collectedFart');
@@ -82,12 +98,26 @@ window.addEventListener('DOMContentLoaded', () => {
     timeElapsed: 0,
     startTimer: () => {
       const timerId = setInterval(() => {
-        if (timerObj.startTime <= 11 && timerObj.startTime > 0) {
+        if (timerObj.startTime <= 11 && timerObj.startTime > 4) {
           timerObj.startTime --;
           timerObj.timeElapsed ++;
           console.log(`timeelapsed: ${timerObj.timeElapsed}`);
-          animateHTML(timer, 'pulse', timerObj.startTime, 800);
+          timeBox.style.backgroundColor = 'orange';
+          setTimeout(() => {
+            timeBox.style.backgroundColor = '#29A7FF';
+          }, 200);
+          animateHTML(timer, 'timerPulse', timerObj.startTime, 900);
+        } else if (timerObj.startTime <= 4 && timerObj.startTime > 0) {
+          timerObj.startTime --;
+          timerObj.timeElapsed ++;
+          console.log(`timeelapsed: ${timerObj.timeElapsed}`);
+          timeBox.style.backgroundColor = 'red';
+          setTimeout(() => {
+            timeBox.style.backgroundColor = '#29A7FF';
+          }, 500);
+          animateHTML(timer, 'timerPulse', timerObj.startTime, 900);
         } else if (timerObj.startTime === 0) {
+
           clearInterval(timerId);
           endGame();
         } else {
@@ -101,7 +131,7 @@ window.addEventListener('DOMContentLoaded', () => {
   };
   // STYLE STUFF
   // height & width of grid scales with height & width variables
-  grid.style.cssText = `height: ${height*50}px; width: ${width*50}px`;
+  grid.style.cssText = `height: ${height*50+2}px; width: ${width*50+2}px`;
 
   function start() {
     // CREATE GRID & PUSH ELEMENTS TO CELLS ARRAY
@@ -110,10 +140,20 @@ window.addEventListener('DOMContentLoaded', () => {
       grid.appendChild(div);
       cells.push(div);
     }
-    // WALLS
-    for (let i=0; i<walls.length; i++) {
-      cells[walls[i]].classList.add('wall');
-    }
+    // NEW WALLS
+    // Pick a random map
+    randomMap = Math.floor(Math.random() * wallsDictionary.length);
+    // For each of the different wall types..
+    wallTypes.forEach(wallType => {
+      // If the value is not null..
+      if (wallsDictionary[randomMap][wallType] !== null) {
+        // Take the cell index and add the wallType
+        wallsDictionary[randomMap][wallType].forEach(cellIndex => {
+          cells[cellIndex].classList.add(wallType);
+          walls.push(cellIndex);
+        });
+      }
+    });
     gameBegun = true;
     timerFired = false;
     timerObj.startTime = 60; //change this for real game
@@ -137,10 +177,10 @@ window.addEventListener('DOMContentLoaded', () => {
     animateHTML(scoreBoard, 'pulse', `${score}`, 1000);
     // scoreBoard.innerHTML = `${score}`;
     // FARTMETER
-    farts = 10;
+    farts = 15;
     collectedFart.style.cssText = `width: ${farts*2}%`;
     // INITIAL MESSAGE
-    animateHTML(message, 'pulse', 'It\'s poopin\' time', 1000);
+    animateHTML(message, 'pulse', 'It\'s <br> poopin\' <br> time', 1000);
     gameContainer.classList.remove('hidden');
     introPage.classList.add('hidden');
     gameOver.classList.add('hidden');
@@ -148,6 +188,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function endGame() {
     grid.innerHTML = '';
+    walls = [];
     cells = [];
     clearInterval(enemyTimer);
     // if (timerObj.timeElapsed >= 100) {
@@ -160,7 +201,8 @@ window.addEventListener('DOMContentLoaded', () => {
     gameBegun = false;
     gameContainer.classList.add('hidden');
     gameOver.classList.remove('hidden');
-    // winMessage.innerHTML = `FABULOUS! YOU SCORED ${score}!`;
+
+    // END GAME MESSAGES
     if (score <= 0) {
       winMessage.innerHTML = `Your score was ${score}! <br> Did you even try?`;
     } else if (score < 10) {
@@ -190,11 +232,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function enemyAI() {
     const enemyMovementConditions = {
-      right: enemyCell%width !== width-1 && !cells[enemyCell+1].classList.contains('wall'),
-      left: enemyCell%width !== 0 && !cells[enemyCell-1].classList.contains('wall'),
-      down: enemyCell < width*height-width && !cells[enemyCell+width].classList.contains('wall'),
-      up: enemyCell > width-1 && !cells[enemyCell-width].classList.contains('wall')
+      right: enemyCell%width !== width-1 && !hasAWall(cells[enemyCell+1].classList),
+      left: enemyCell%width !== 0 && !hasAWall(cells[enemyCell-1].classList),
+      down: enemyCell < width*height-width && !hasAWall(cells[enemyCell+width].classList),
+      up: enemyCell > width-1 && !hasAWall(cells[enemyCell-width].classList)
     };
+
     cells[enemyCell].classList.remove(`enemy-${enemyDirection}`);
     // use switch statement to move enemy
     switch(enemyDirection) {
@@ -226,13 +269,15 @@ window.addEventListener('DOMContentLoaded', () => {
       timerObj.startTimer();
     }
     // MAKE JIMBA MOVE & FART -> CAN'T MOVE PAST GRID EDGE & CAN'T MOVE INTO WALLS, MOVE WITH ARROW KEYS OR WASD. PRESS SPACEBAR TO FART.
+
     // OBJECTS
     const jimbaMovementConditions = {
-      right: currentCell%width !== width-1 && !cells[currentCell+1].classList.contains('wall'),
-      left: currentCell%width !== 0 && !cells[currentCell-1].classList.contains('wall'),
-      down: currentCell < width*height-width && !cells[currentCell+width].classList.contains('wall'),
-      up: currentCell > width-1 && !cells[currentCell-width].classList.contains('wall')
+      right: currentCell%width !== width-1 && !hasAWall(cells[currentCell+1].classList),
+      left: currentCell%width !== 0 && !hasAWall(cells[currentCell-1].classList),
+      down: currentCell < width*height-width && !hasAWall(cells[currentCell+width].classList),
+      up: currentCell > width-1 && !hasAWall(cells[currentCell-width].classList)
     };
+
     // FUNCTIONS
     function moveJimba(conditions, movement, direction) {
       if (conditions) {
@@ -301,9 +346,9 @@ window.addEventListener('DOMContentLoaded', () => {
     // JIMBA MEETS TIME LOGIC
     if (cells[currentCell].classList.contains('time')) {
       cells[currentCell].classList.remove('time');
-      timerObj.startTime += 10;
-      console.log('Time boosted by 10s');
-      animateHTML(message, 'pulse', 'Ooooo. Extra <br> time!', 1000);
+      timerObj.startTime += 8;
+      console.log('Time boosted by 8s');
+      animateHTML(message, 'pulse', 'Ooooo. <br> Extra <br> time!', 1000);
       makeRandomCell('time', 10000);
     }
     // JIMBA MEETS ENEMY LOGIC
@@ -319,13 +364,17 @@ window.addEventListener('DOMContentLoaded', () => {
       if (score < -99) {
         endGame();
       }
+      grid.classList.add('danger');
+      setTimeout(() => {
+        grid.classList.remove('danger');
+      }, 200);
       animateHTML(scoreBoard, 'redShake', `${score}`, 1000);
-      animateHTML(message, 'pulse', 'Oh no! <br> Jimba\'s lost points and energy!', 1000);
+      animateHTML(message, 'pulse', 'Oh no! <br> Jimba\'s <br> lost <br> points <br> and <br> energy!', 1000);
       //add sad simba animation
     }
     // ENEMY MEETS FART LOGIC
     if (cells[enemyCell].classList.contains('fart')) {
-      animateHTML(message, 'pulse', 'SCORE! Fart in all the faces!!', 1000);
+      animateHTML(message, 'pulse', 'SCORE! <br> Fart in <br> all the faces!!', 1000);
       score++;
       animateHTML(scoreBoard, 'greenJump', `${score}`, 1000);
       console.log(score);

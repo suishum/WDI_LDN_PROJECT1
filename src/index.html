@@ -10,18 +10,42 @@
   </head>
   <body>
     <div class="intro-page">
-      <h1>Jimba, <br> The Cropdusting Pug</h1>
-      <h4>CROP DUSTING</h4>
-      <p>Passing gas in a stealth manner, usually while walking through a crowd or a group, so that someone else gets blamed for the stench, or at the very least people besides the assailant must suffer it.</p>
-      <h4>INSTRUCTIONS</h4>
-      <p>Use W A S D or <i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> <i class="fa fa-arrow-left"></i> <i class="fa fa-arrow-right"></i> keys to move.</p>
-      <p>Collect chicken for more energy</p>
-      <p>Collect clocks for a time boost</p>
-      <p>Cropdust evil Jimba but don't get too close, he is not your friend.</p>
-      <button class="goBtn">GO!</button>
+      <h1>Jimba,</h1>
+      <h2>The Cropdusting Pug</h2>
+      <hr>
+      <div class="intro-container">
+        <div class="column">
+          <div class="definition">
+            <h4>CROP DUSTING</h4>
+            <p>Passing gas in a stealth manner, usually while walking through a crowd or a group, so that someone else gets blamed for the stench, or at the very least people besides the assailant must suffer it.</p>
+          </div>
+          <div class="controls">
+            <h4>CONTROLS</h4>
+            <p>Use W A S D or <i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> <i class="fa fa-arrow-left"></i> <i class="fa fa-arrow-right"></i> keys to move.</p>
+            <p>Press SPACEBAR to fart.</p>
+            <p>Collect chicken for more fart fuel</p>
+            <p>Collect clocks for a time boost</p>
+          </div>
+          <div class="how-to">
+            <h4>INSTRUCTIONS</h4>
+            <p>Cropdust evil Jimba but don't get too close, he is not your friend.</p>
+            <!-- <p>Also watch out for Crazy Dog.. That one's a loose cannon.</p> -->
+          </div>
+        </div>
+        <div class="column">
+          <div class="this-is-jimba">
+            <img src="/images/loading.gif" height=250px alt="Jimba animation">
+            <button class="goBtn">GO!</button>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <p>A game by Sui Shum</p>
     </div>
     <div class="game-container hidden">
-      <h1>Jimba, <br>The Cropdusting Pug</h1>
+      <h1>Jimba,</h1>
+      <h2>The Cropdusting Pug</h2>
+      <hr>
         <div class="container">
         <div id="grid">
 
@@ -32,26 +56,33 @@
               60
             </div>
           </div>
-          <div>
+          <div class="score-board">
             <p>Score: <span id="score"></span></p>
           </div>
+          <div class="fart-stuff">
+            <p>Fart fuel:</p>
           <div id="fartMeter">
             <div id="collectedFart">
 
             </div>
           </div>
+          </div>
           <div id="message">
-            -
+
           </div>
         </div>
       </div>
+      <hr>
     </div>
     <div class="game-over hidden">
       <h1>GAME OVER</h1>
+      <hr>
       <div>
         <h2 id="winMessage"></h2>
         <button class="retryBtn">PLAY AGAIN?</button>
       </div>
+      <hr>
+      <p>A game by Sui Shum</p>
     </div>
   </body>
 </html>
