@@ -14,6 +14,12 @@ let timerFired = false;
 // GRID DIMENSIONS
 const height = 10;
 const width = 10;
+// SOUNDS
+const fartSounds = [
+  '/sounds/fart1.wav',
+  '/sounds/fart2.wav',
+  '/sounds/fart3.wav'
+];
 // cells array will get populated with the div's generated
 let cells = [];
 // currentCell = jimba's position
@@ -46,6 +52,22 @@ const wallsDictionary = [{
   vb: [22, 87, 93],
   vm: [12],
   vt: [2, 77, 83]
+}, {
+  bc: null,
+  blc: null,
+  brc: null,
+  ct: null,
+  hl: null,
+  hm: null,
+  hr: null,
+  lc: null,
+  rc: null,
+  solo: [11, 15, 19, 30, 34, 38, 51, 55, 59, 70, 74, 78, 91, 95],
+  tlc: null,
+  trc: null,
+  vb: null,
+  vm: null,
+  vt: null
 }];
 let randomMap = Math.floor(Math.random() * wallsDictionary.length);
 // Pick out the different wall types
@@ -92,6 +114,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const timer = document.querySelector('#timer');
   const message = document.querySelector('#message');
   const collectedFart = document.querySelector('#collectedFart');
+  const audio = document.querySelector('audio');
   // OBJECTS
   const timerObj = {
     startTime: 60,
@@ -317,6 +340,9 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     // JIMBA FARTS
     if ( keys.spacebar ) {
+      const randomSound = Math.floor(Math.random() * fartSounds.length);
+      audio.setAttribute('src', fartSounds[randomSound]);
+      audio.play();
       if (farts > 0) {
         farts--;
         collectedFart.style.width = `${farts*2}%`;
