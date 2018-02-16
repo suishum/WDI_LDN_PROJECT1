@@ -1,9 +1,6 @@
 * {
   box-sizing: border-box;
   font-family: 'Press Start 2P', cursive;
-  hr {
-    // color: black;
-  }
 }
 
 body .container #grid.danger {
@@ -11,13 +8,6 @@ body .container #grid.danger {
   background-image: url(/images/floor.png);
   background-size: 50px;
   background-blend-mode: color-dodge;
-}
-
-
-@keyframes fadeInOut {
-  0%   { background-color: rgba(255, 255, 255, 0); }
-  50%  { background-color: rgba(255, 255, 255, 1); }
-  100% { background-color: rgba(255, 255, 255, 0); }
 }
 
 @keyframes pulse {
@@ -40,34 +30,35 @@ body .container #grid.danger {
   animation: timerPulse 1000ms ease-in-out;
 }
 
-@keyframes jump {
-  0%   { transform: translate(16px, -31px); }
-  25%  { transform: translate(16px, -36px); };
-  50%  { transform: translate(16px, -31px); }
-  75%  { transform: translate(16px, -26px); }
-  100% { transform: translate(16px, -31px); }
+
+// @keyframes jump {
+//   0%   { transform: translate(16px, -31px); }
+//   25%  { transform: translate(16px, -36px); };
+//   50%  { transform: translate(16px, -31px); }
+//   75%  { transform: translate(16px, -26px); }
+//   100% { transform: translate(16px, -31px); }
+// }
+
+.green {
+  color: #69A635;
+  // width: 40px;
+  // position: absolute;
+  // animation: jump 1000ms linear;
 }
 
-.greenJump {
-  color: green;
-  width: 40px;
-  position: absolute;
-  animation: jump 1000ms linear;
-}
+// @keyframes shake {
+//   0%   { transform: translate(16px, -31px); }
+//   25%  { transform: translate(11px, -31px); };
+//   50%  { transform: translate(16px, -31px); }
+//   75%  { transform: translate(21px, -31px); }
+//   100% { transform: translate(16px, -31px); }
+// }
 
-@keyframes shake {
-  0%   { transform: translate(16px, -31px); }
-  25%  { transform: translate(11px, -31px); };
-  50%  { transform: translate(16px, -31px); }
-  75%  { transform: translate(21px, -31px); }
-  100% { transform: translate(16px, -31px); }
-}
-
-.redShake {
+.red {
   color: red;
-  width: 40px;
-  position: absolute;
-  animation: shake 1000ms linear;
+  // width: 40px;
+  // position: absolute;
+  // animation: shake 1000ms linear;
 }
 
 
@@ -76,7 +67,10 @@ div.hidden {
 }
 
 body {
-  // background-image: url(/images/grass.jpg);
+  background-color: #BEE8F4;
+  // background-color: #7FB3ED;
+  // background-color: #789DC9;
+  // background-color: #747E92;
   .intro-page {
     border: 1px solid black;
     text-align: center;
@@ -90,6 +84,7 @@ body {
       img {
         margin: 50px 20px 20px 30px;
         padding: 10px;
+        cursor: pointer;
       }
       h4 {
         padding-top: 10px;
@@ -111,6 +106,12 @@ body {
       background-color: #A1C502;
       color: white;
       border: 1px solid black;
+      transition: 0.4s;
+      &:hover {
+        cursor: pointer;
+        background-color: #69A635;
+        transition: 0.4s;
+      }
     }
   }
   .game-container {
@@ -179,21 +180,24 @@ body {
         margin: 0 auto;
         background-color: #29A7FF;
         #timer {
-          width: 50%;
+          width: 90px;
+          display: block;
           margin: 0 auto;
           text-align: center;
           font-size: 50px;
-          transform: translateY(68px);
+          transform: translateY(65px);
           color: white;
         }
       }
       .score-board {
         transform: translateY(20px);
+        // text-align: center;
         #score {
           width:  40px; // 50 * js wdith var
-          height: 20px;
+          height: 40px;
           padding: 0;
           margin: 10px auto;
+          font-size: 18px;
           // border: 1px solid black;
         }
       }
@@ -257,6 +261,12 @@ body {
         background-color: #A1C502;
         color: white;
         border: 1px solid black;
+        transition: 0.4s;
+        &:hover {
+          cursor: pointer;
+          background-color: #69A635;
+          transition: 0.4s;
+        }
       }
     }
     p {

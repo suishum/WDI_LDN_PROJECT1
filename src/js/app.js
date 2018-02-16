@@ -1,40 +1,31 @@
-// MVP
-// 1. generate grid with height * width variables
-// 2. put simba in, make him move, make sure he cannot move past the edge of the grid
-// 3. generate walls, can't move past walls.
-// 4. simba releases a trail of fart.
-// 5. generate an enemy, make it move using an algorithm (move in one direction until it reaches the end of the grid, turn repeat)
-//
-// do 1 map & 1 level, extend the game by making more maps with more levels.
-
+// ================
 // GLOBAL VARIABLES
-let gameBegun = false;
-// TIMER
-let timerFired = false;
-// GRID DIMENSIONS
+// ================
+let gameBegun = false; // starts on intro page so game has not begun
+let timerFired = false; // timer is fired on game start()
+// Grid dimensions
 const height = 10;
 const width = 10;
-// SOUNDS
+let cells = []; // cells array will get populated with the div's generated
+// Jimba's starting position
+let walls = []; // walls array will get populated with the wall positions, this is used to ensure items are not randomly generated in walls.
+let currentCell = 0;
+let jimbaDirection = 'right';
+// Enemy starting position
+let enemyCell = 99;
+let enemyDirection = 'right'; //initialise at right
+let enemyTimer = null;
+// Starting stats
+let score = 0;
+let farts = 15;
+// ================
+// GLOBAL LIBRARIES
+// ================
 const fartSounds = [
   '/sounds/fart1.wav',
   '/sounds/fart2.wav',
   '/sounds/fart3.wav'
 ];
-// cells array will get populated with the div's generated
-let cells = [];
-// currentCell = jimba's position
-let currentCell = 0;
-let jimbaDirection = 'right';
-// enemyCell = enemy's position
-let enemyCell = 99;
-let enemyDirection = 'right'; //initialise at right
-let enemyTimer = null;
-// fartMeter = jimba's fart fuel (STARTS AT 15)
-let farts = 15;
-// score
-let score = 0;
-// turn into wallDictionary later
-let walls = [];
 // Maps
 const wallsDictionary = [{
   bc: null,
@@ -69,12 +60,14 @@ const wallsDictionary = [{
   vm: null,
   vt: null
 }];
+// Picks a random map
 let randomMap = Math.floor(Math.random() * wallsDictionary.length);
-// Pick out the different wall types
+// Pick out the different wall types for use later
 const wallTypes = Object.keys(wallsDictionary[randomMap]);
-
+// ================
 // GLOBAL FUNCTIONS
-// FUNCTION TO MAKE RANDOM CELL (NOT IN A WALL)
+// ================
+// Inserts class into a cell that doesnt contain a wall
 function makeRandomCell(className, delay) {
   window.setTimeout(() => {
     let randomCell = Math.floor(Math.random() * (height*width));
@@ -85,7 +78,7 @@ function makeRandomCell(className, delay) {
     cells[randomCell].classList.add(className);
   }, delay);
 }
-
+// Animate messages
 function animateHTML(selector, classAsString, messageAsString, delay) {
   selector.classList.add(classAsString);
   selector.innerHTML = messageAsString;
@@ -93,29 +86,37 @@ function animateHTML(selector, classAsString, messageAsString, delay) {
     selector.classList.remove(classAsString);
   }, delay);
 }
-
+// Checks if a cell has a wall
 function hasAWall(value) {
   return wallTypes.some(wallType => value.contains(wallType));
 }
 
-
+// =========================
+// DOMContentLoaded Listener
+// =========================
 window.addEventListener('DOMContentLoaded', () => {
-  // INTRO & END PAGE VARIABLES
+  // ==============================
+  // INTRO & END PAGE DOM VARIABLES
+  // ==============================
   const go = document.querySelector('.goBtn');
   const introPage = document.querySelector('.intro-page');
+  const jimba = document.querySelector('img');
   const gameContainer = document.querySelector('.game-container');
   const winMessage = document.querySelector('#winMessage');
   const gameOver = document.querySelector('.game-over');
   const retry = document.querySelector('.retryBtn');
-  // GAME VARIABLES
+  // ==================
+  // GAME DOM VARIABLES
+  // ==================
   const grid = document.querySelector('#grid');
   const scoreBoard = document.querySelector('#score');
+  scoreBoard.classList.add('animated');
   const timeBox = document.querySelector('.timebox');
   const timer = document.querySelector('#timer');
   const message = document.querySelector('#message');
   const collectedFart = document.querySelector('#collectedFart');
-  const audio = document.querySelector('audio');
-  // OBJECTS
+  const audio = document.querySelector('#fart-sound');
+  // Timer
   const timerObj = {
     startTime: 60,
     timeElapsed: 0,
@@ -124,46 +125,53 @@ window.addEventListener('DOMContentLoaded', () => {
         if (timerObj.startTime <= 11 && timerObj.startTime > 4) {
           timerObj.startTime --;
           timerObj.timeElapsed ++;
-          console.log(`timeelapsed: ${timerObj.timeElapsed}`);
-          timeBox.style.backgroundColor = 'orange';
+          timer.innerHTML = timerObj.startTime;
+          timeBox.style.transition = '0.2s';
+          timeBox.style.backgroundColor = '#E88449';
           setTimeout(() => {
+            timeBox.style.transition = '0.2s';
             timeBox.style.backgroundColor = '#29A7FF';
           }, 200);
           animateHTML(timer, 'timerPulse', timerObj.startTime, 900);
         } else if (timerObj.startTime <= 4 && timerObj.startTime > 0) {
           timerObj.startTime --;
           timerObj.timeElapsed ++;
-          console.log(`timeelapsed: ${timerObj.timeElapsed}`);
-          timeBox.style.backgroundColor = 'red';
+          timer.innerHTML = timerObj.startTime;
+          timeBox.style.transition = '0.2s';
+          timeBox.style.backgroundColor = '#F64744';
           setTimeout(() => {
+            timeBox.style.transition = '0.2s';
             timeBox.style.backgroundColor = '#29A7FF';
           }, 500);
           animateHTML(timer, 'timerPulse', timerObj.startTime, 900);
         } else if (timerObj.startTime === 0) {
-
           clearInterval(timerId);
           endGame();
         } else {
           timerObj.startTime --;
           timerObj.timeElapsed ++;
-          console.log(`timeelapsed: ${timerObj.timeElapsed}`);
           timer.innerHTML = timerObj.startTime;
         }
       }, 1000);
     }
   };
-  // STYLE STUFF
+  // ============
+  // STYLE SET UP
+  // ============
   // height & width of grid scales with height & width variables
   grid.style.cssText = `height: ${height*50+2}px; width: ${width*50+2}px`;
-
+  // =========
+  // FUNCTIONS
+  // =========
   function start() {
-    // CREATE GRID & PUSH ELEMENTS TO CELLS ARRAY
+    // 1. Create grid
     for (let i=0; i<height*width; i++) {
       const div = document.createElement('div');
       grid.appendChild(div);
+      // 2. Push elements to previously empty cells array
       cells.push(div);
     }
-    // NEW WALLS
+    // 3. Create walls
     // Pick a random map
     randomMap = Math.floor(Math.random() * wallsDictionary.length);
     // For each of the different wall types..
@@ -173,75 +181,75 @@ window.addEventListener('DOMContentLoaded', () => {
         // Take the cell index and add the wallType
         wallsDictionary[randomMap][wallType].forEach(cellIndex => {
           cells[cellIndex].classList.add(wallType);
+          // Push cell index to previously empty walls array, this will be used to generate items in random cells.
           walls.push(cellIndex);
         });
       }
     });
+    // 4. Variable set up
     gameBegun = true;
-    timerFired = false;
-    timerObj.startTime = 60; //change this for real game
+    timerFired = false; // Timer is fired after the first key is pressed.
+    timerObj.startTime = 30; //CHANGE THIS FOR TESTING
     timerObj.timeElapsed = 0;
     timer.innerHTML = 60;
-    // ADD JIMBA TO BOARD
+    score = 0; // Reset scoreboard
+    animateHTML(scoreBoard, 'pulse', `${score}`, 1000);
+    farts = 15; // Reset fart reserves
+    collectedFart.style.cssText = `width: ${farts*2}%`;
+    animateHTML(message, 'pulse', 'It\'s <br> poopin\' <br> time! <br> Press any <br> button <br> to begin.', 1000); // Reset intro message
+    // 5. Add Jimba
     currentCell = 0;
-    cells[currentCell].classList.add('jimba-right');
-    jimbaDirection = 'right';
-    // ADD ENEMY TO THE BOARD
+    jimbaDirection = 'right'; // starts facing
+    cells[currentCell].classList.add(`jimba-${jimbaDirection}`);
+    // 6. Add enemy
     enemyCell = 99;
-    enemyDirection = 'right'; //initialise at right
+    enemyDirection = 'right'; // starts facing
     cells[enemyCell].classList.add(`enemy-${enemyDirection}`);
     enemyTimer = window.setInterval(enemyAI, 1000);
-    // ADD INITIAL TIME POWERUP TO THE BOARD, GENERATES EVERY 10 SECONDS
-    makeRandomCell('time', 10000);
-    // ADD INITIAL CHICKEN TO THE BOARD.
+    // 7. Add initial powerups
     makeRandomCell('chicken');
-    // SCOREBOARD
-    score = 0;
-    animateHTML(scoreBoard, 'pulse', `${score}`, 1000);
-    // scoreBoard.innerHTML = `${score}`;
-    // FARTMETER
-    farts = 15;
-    collectedFart.style.cssText = `width: ${farts*2}%`;
-    // INITIAL MESSAGE
-    animateHTML(message, 'pulse', 'It\'s <br> poopin\' <br> time', 1000);
+    makeRandomCell('time', 10000);
+    // 8. Reveal game & remove other pages
     gameContainer.classList.remove('hidden');
     introPage.classList.add('hidden');
     gameOver.classList.add('hidden');
   }
-
   function endGame() {
+    // 1. Clear variables that were automatically populated
+    gameBegun = false;
     grid.innerHTML = '';
-    walls = [];
     cells = [];
+    walls = [];
+    // 2. Stop enemy (so when the player retries it doesnt produce a second enemy)
     clearInterval(enemyTimer);
     // if (timerObj.timeElapsed >= 100) {
     //   clearInterval(enemyTimer2);
-    // } //SECOND ENEMY DOES NOT WORK YET
+    // } //SECOND ENEMY DOES NOT WORK YET BUT USE THIS TO CLEAR IT WHEN IT DOES WORK!
     // // TO CLEAR THE BOARD OF ALL CLASSES EXCEPT EXISTING WALLS
     // cells.forEach((cell, index) => {
     //   cell.className = walls.includes(index) ? 'wall' : '';
     // });
-    gameBegun = false;
+    // 3. Produce an end game message
+    if (score <= 0) {
+      winMessage.innerHTML = `<p>Your score was ${score}!</p>  <p>Did you even try?</p>`;
+    } else if (score < 10) {
+      winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Mehhh</p>`;
+    } else if (score < 30) {
+      winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Alright maaate, not bad!</p>`;
+    } else if (score < 50) {
+      winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Amazing!</p>`;
+    } else if (score < 100) {
+      winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Teach me your ways!`;
+    } else {
+      winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>U R A DUSTCROPPING MASTER!!!!!!!!!!</p>`;
+    }
+    // 4. Hide game container and reveal game over page
     gameContainer.classList.add('hidden');
     gameOver.classList.remove('hidden');
-
-    // END GAME MESSAGES
-    if (score <= 0) {
-      winMessage.innerHTML = `Your score was ${score}! <br> Did you even try?`;
-    } else if (score < 10) {
-      winMessage.innerHTML = `Your score was ${score}! <br> Mehhh`;
-    } else if (score < 30) {
-      winMessage.innerHTML = `Your score was ${score}! <br> Alright maaate, not bad!`;
-    } else if (score < 50) {
-      winMessage.innerHTML = `Your score was ${score}! <br> Amazing!`;
-    } else if (score < 100) {
-      winMessage.innerHTML = `Your score was ${score}! <br> Teach me your ways!`;
-    } else {
-      winMessage.innerHTML = `Your score was ${score}! <br> U R A DUSTCROPPING MASTER!!!!!!!!!!`;
-    }
   }
-
+  // =======================
   // ALGORITHM TO MOVE ENEMY
+  // =======================
   const enemyFacing = ['right', 'left', 'down', 'up'];
   // FUNCTION FOR ENEMY MOVEMENT
   function moveEnemy(conditions, movement, direction) {
@@ -252,7 +260,6 @@ window.addEventListener('DOMContentLoaded', () => {
       enemyDirection = enemyFacing[Math.floor(Math.random() * enemyFacing.length)];
     }
   }
-
   function enemyAI() {
     const enemyMovementConditions = {
       right: enemyCell%width !== width-1 && !hasAWall(cells[enemyCell+1].classList),
@@ -260,7 +267,6 @@ window.addEventListener('DOMContentLoaded', () => {
       down: enemyCell < width*height-width && !hasAWall(cells[enemyCell+width].classList),
       up: enemyCell > width-1 && !hasAWall(cells[enemyCell-width].classList)
     };
-
     cells[enemyCell].classList.remove(`enemy-${enemyDirection}`);
     // use switch statement to move enemy
     switch(enemyDirection) {
@@ -279,20 +285,26 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     cells[enemyCell].classList.add(`enemy-${enemyDirection}`);
   }
-
+  // ===============
+  // EVENT LISTENERS
+  // ===============
+  jimba.addEventListener('click', () => {
+    const randomSound = Math.floor(Math.random() * fartSounds.length);
+    audio.setAttribute('src', fartSounds[randomSound]);
+    audio.play();
+  });
   go.addEventListener('click', start);
   retry.addEventListener('click', start);
-
-
+  // ==============
+  // JIMBA MOVEMENT
+  // ==============
   window.addEventListener('keydown', (e) => {
     if (!gameBegun) return false;
-    // START TRIGGER TIMER
+    // Start timer and flick switch
     if (!timerFired) {
       timerFired = true;
       timerObj.startTimer();
     }
-    // MAKE JIMBA MOVE & FART -> CAN'T MOVE PAST GRID EDGE & CAN'T MOVE INTO WALLS, MOVE WITH ARROW KEYS OR WASD. PRESS SPACEBAR TO FART.
-
     // OBJECTS
     const jimbaMovementConditions = {
       right: currentCell%width !== width-1 && !hasAWall(cells[currentCell+1].classList),
@@ -300,7 +312,6 @@ window.addEventListener('DOMContentLoaded', () => {
       down: currentCell < width*height-width && !hasAWall(cells[currentCell+width].classList),
       up: currentCell > width-1 && !hasAWall(cells[currentCell-width].classList)
     };
-
     // FUNCTIONS
     function moveJimba(conditions, movement, direction) {
       if (conditions) {
@@ -394,15 +405,14 @@ window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         grid.classList.remove('danger');
       }, 200);
-      animateHTML(scoreBoard, 'redShake', `${score}`, 1000);
+      animateHTML(scoreBoard, 'red', `${score}`, 1000);
       animateHTML(message, 'pulse', 'Oh no! <br> Jimba\'s <br> lost <br> points <br> and <br> energy!', 1000);
-      //add sad simba animation
     }
     // ENEMY MEETS FART LOGIC
     if (cells[enemyCell].classList.contains('fart')) {
       animateHTML(message, 'pulse', 'SCORE! <br> Fart in <br> all the faces!!', 1000);
       score++;
-      animateHTML(scoreBoard, 'greenJump', `${score}`, 1000);
+      animateHTML(scoreBoard, 'green', `${score}`, 1000);
       console.log(score);
       // add enemy lose animation
     }
@@ -420,22 +430,17 @@ window.addEventListener('DOMContentLoaded', () => {
       clearInterval(enemyTimer);
       enemyTimer = window.setInterval(enemyAI, 200);
     }
-    // else if (timerObj.timeElapsed === 100) {
-    //   enemyTimer2 = window.setInterval(enemyAI, 200);
-    // }
     // LASTLY, put jimba back
     cells[currentCell].classList.add(`jimba-${jimbaDirection}`);
   }, false);
 
 
-
   // extra bits
   //
-  // add theme music
+  // add sad simba animation/ scuffle animation when simba meets enemy
   // add fart/ bark/ camera sounds
   // make grid bigger?
   // enter konami code to get a full fart boost
-  // animate simba's movement so it looks like he moves fluidly
-
+  // when timerObj.timeElapsed === 100 add crazydog at full speed !!
 
 });
