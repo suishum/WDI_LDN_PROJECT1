@@ -186,7 +186,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // 4. Variable set up
     gameBegun = true;
     timerFired = false; // Timer is fired after the first key is pressed.
-    timerObj.startTime = 10; //CHANGE THIS FOR TESTING
+    timerObj.startTime = 60; //CHANGE THIS FOR TESTING
     timerObj.timeElapsed = 0;
     timer.innerHTML = 60;
     score = 0; // Reset scoreboard
