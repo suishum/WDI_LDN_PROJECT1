@@ -121,36 +121,33 @@ window.addEventListener('DOMContentLoaded', () => {
     startTime: 60,
     timeElapsed: 0,
     startTimer: () => {
+      function incrementTime() {
+        timerObj.startTime --;
+        timerObj.timeElapsed ++;
+        timer.innerHTML = timerObj.startTime;
+      }
+      function flashColor(colorAsString, duration) {
+        timeBox.style.transition = '0.2s';
+        timeBox.style.backgroundColor = colorAsString;
+        setTimeout(() => {
+          timeBox.style.transition = '0.2s';
+          timeBox.style.backgroundColor = '#29A7FF';
+        }, duration);
+      }
       const timerId = setInterval(() => {
         if (timerObj.startTime <= 11 && timerObj.startTime > 4) {
-          timerObj.startTime --;
-          timerObj.timeElapsed ++;
-          timer.innerHTML = timerObj.startTime;
-          timeBox.style.transition = '0.2s';
-          timeBox.style.backgroundColor = '#E88449';
-          setTimeout(() => {
-            timeBox.style.transition = '0.2s';
-            timeBox.style.backgroundColor = '#29A7FF';
-          }, 200);
+          incrementTime();
+          flashColor('#E88449', 200);
           animateHTML(timer, 'timerPulse', timerObj.startTime, 900);
         } else if (timerObj.startTime <= 4 && timerObj.startTime > 0) {
-          timerObj.startTime --;
-          timerObj.timeElapsed ++;
-          timer.innerHTML = timerObj.startTime;
-          timeBox.style.transition = '0.2s';
-          timeBox.style.backgroundColor = '#F64744';
-          setTimeout(() => {
-            timeBox.style.transition = '0.2s';
-            timeBox.style.backgroundColor = '#29A7FF';
-          }, 500);
+          incrementTime();
+          flashColor('#F64744', 400);
           animateHTML(timer, 'timerPulse', timerObj.startTime, 900);
         } else if (timerObj.startTime === 0) {
           clearInterval(timerId);
           endGame();
         } else {
-          timerObj.startTime --;
-          timerObj.timeElapsed ++;
-          timer.innerHTML = timerObj.startTime;
+          incrementTime();
         }
       }, 1000);
     }
@@ -189,7 +186,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // 4. Variable set up
     gameBegun = true;
     timerFired = false; // Timer is fired after the first key is pressed.
-    timerObj.startTime = 30; //CHANGE THIS FOR TESTING
+    timerObj.startTime = 10; //CHANGE THIS FOR TESTING
     timerObj.timeElapsed = 0;
     timer.innerHTML = 60;
     score = 0; // Reset scoreboard
