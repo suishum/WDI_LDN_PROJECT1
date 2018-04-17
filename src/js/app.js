@@ -2,7 +2,7 @@
 // GLOBAL VARIABLES
 // ================
 let gameBegun = false; // starts on intro page so game has not begun
-let timerFired = false; // timer is fired on game start()
+let timerFired = false; // timer is fired on game startGame()
 // Grid dimensions
 const height = 10;
 const width = 10;
@@ -26,40 +26,51 @@ const fartSounds = [
   '/sounds/fart2.wav',
   '/sounds/fart3.wav'
 ];
+
+const directionDictionary = {
+  right: 1,
+  left: -1,
+  down: width,
+  up: -width
+};
+
 // Maps
 const wallsDictionary = [{
-  bc: null,
-  blc: null,
-  brc: null,
-  ct: null,
-  hl: [15, 47, 51],
-  hm: [16, 48, 52],
-  hr: [17, 49, 53],
-  lc: null,
-  rc: null,
-  solo: null,
-  tlc: null,
-  trc: null,
-  vb: [22, 87, 93],
-  vm: [12],
-  vt: [2, 77, 83]
-}, {
-  bc: null,
-  blc: null,
-  brc: null,
-  ct: null,
-  hl: null,
-  hm: null,
-  hr: null,
-  lc: null,
-  rc: null,
-  solo: [11, 15, 19, 30, 34, 38, 51, 55, 59, 70, 74, 78, 91, 95],
-  tlc: null,
-  trc: null,
-  vb: null,
-  vm: null,
-  vt: null
-}];
+  bottomCenter: null,
+  bottomLeftCorner: null,
+  bottomRightCorner: null,
+  horizontalLeft: [15, 47, 51],
+  horizontalMiddle: [16, 48, 52],
+  horizontalRight: [17, 49, 53],
+  topCenter: null,
+  topLeftCorner: null,
+  topRightCorner: null,
+  verticalBottom: [22, 87, 93],
+  verticalMiddle: [12],
+  verticalTop: [2, 77, 83],
+  leftCorner: null,
+  rightCorner: null,
+  solo: null
+}
+// , {
+//   bottomCenter: null,
+//   bottomLeftCorner: null,
+//   bottomRightCorner: null,
+//   topCenter: null,
+//   horizontalLeft: null,
+//   horizontalMiddle: null,
+//   horizontalRight: null,
+//   leftCorner: null,
+//   rightCorner: null,
+//   solo: [11, 15, 19, 30, 34, 38, 51, 55, 59, 70, 74, 78, 91, 95],
+//   topLeftCorner: null,
+//   topRightCorner: null,
+//   verticalBottom: null,
+//   verticalMiddle: null,
+//   verticalTop: null
+// }
+];
+
 // Picks a random map
 let randomMap = Math.floor(Math.random() * wallsDictionary.length);
 // Pick out the different wall types for use later
@@ -120,10 +131,11 @@ window.addEventListener('DOMContentLoaded', () => {
   const timerObj = {
     startTime: 60,
     timeElapsed: 0,
-    startTimer: () => {
+    startTimer() {
+      const self = this;
       function incrementTime() {
-        timerObj.startTime --;
-        timerObj.timeElapsed ++;
+        self.startTime --;
+        self.timeElapsed ++;
         timer.innerHTML = timerObj.startTime;
       }
       function flashColor(colorAsString, duration) {
@@ -135,15 +147,15 @@ window.addEventListener('DOMContentLoaded', () => {
         }, duration);
       }
       const timerId = setInterval(() => {
-        if (timerObj.startTime <= 11 && timerObj.startTime > 4) {
+        if (self.startTime <= 11 && self.startTime > 4) {
           incrementTime();
           flashColor('#E88449', 200);
-          animateHTML(timer, 'timerPulse', timerObj.startTime, 900);
-        } else if (timerObj.startTime <= 4 && timerObj.startTime > 0) {
+          animateHTML(timer, 'timerPulse', self.startTime, 900);
+        } else if (self.startTime <= 4 && self.startTime > 0) {
           incrementTime();
           flashColor('#F64744', 400);
-          animateHTML(timer, 'timerPulse', timerObj.startTime, 900);
-        } else if (timerObj.startTime === 0) {
+          animateHTML(timer, 'timerPulse', self.startTime, 900);
+        } else if (self.startTime === 0) {
           clearInterval(timerId);
           endGame();
         } else {
@@ -160,7 +172,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // =========
   // FUNCTIONS
   // =========
-  function start() {
+  function startGame() {
     // 1. Create grid
     for (let i=0; i<height*width; i++) {
       const div = document.createElement('div');
@@ -174,13 +186,15 @@ window.addEventListener('DOMContentLoaded', () => {
     // For each of the different wall types..
     wallTypes.forEach(wallType => {
       // If the value is not null..
-      if (wallsDictionary[randomMap][wallType] !== null) {
-        // Take the cell index and add the wallType
-        wallsDictionary[randomMap][wallType].forEach(cellIndex => {
-          cells[cellIndex].classList.add(wallType);
-          // Push cell index to previously empty walls array, this will be used to generate items in random cells.
-          walls.push(cellIndex);
-        });
+      if (wallsDictionary[randomMap][wallType]) {
+        // Take the cell index and add the wallType to walls array
+        walls = wallsDictionary[randomMap][wallType].map(cellIndex => cells[cellIndex].classList.add(wallType));
+
+        // wallsDictionary[randomMap][wallType].forEach(cellIndex => { // TODO: refactor to .map ABOVE
+        //   cells[cellIndex].classList.add(wallType);
+        //   // Push cell index to previously empty walls array, this will be used to generate items in random cells.
+        //   walls.push(cellIndex);
+        // });
       }
     });
     // 4. Variable set up
@@ -227,19 +241,42 @@ window.addEventListener('DOMContentLoaded', () => {
     //   cell.className = walls.includes(index) ? 'wall' : '';
     // });
     // 3. Produce an end game message
-    if (score <= 0) {
-      winMessage.innerHTML = `<p>Your score was ${score}!</p>  <p>Did you even try?</p>`;
-    } else if (score < 10) {
-      winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Mehhh</p>`;
-    } else if (score < 30) {
-      winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Alright maaate, not bad!</p>`;
-    } else if (score < 50) {
-      winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Amazing!</p>`;
-    } else if (score < 100) {
-      winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Teach me your ways!`;
-    } else {
-      winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>U R A DUSTCROPPING MASTER!!!!!!!!!!</p>`;
+    winMessage.innerHTML = `<p>Your score was ${score}!</p>`;
+    switch(true) {
+      case (score <= 0):
+        winMessage.innerHTML += '<p>Did you even try?</p>';
+        break;
+      case (score < 10):
+        winMessage.innerHTML += '<p>Mehhh</p>';
+        break;
+      case (score < 30):
+        winMessage.innerHTML += '<p>Alright maaate, not bad!</p>';
+        break;
+      case (score < 50):
+        winMessage.innerHTML += '<p>Amazing!</p>';
+        break;
+      case (score < 100):
+        winMessage.innerHTML += '<p>Teach me your ways!';
+        break;
+      case (score >= 100):
+        winMessage.innerHTML += '<p>U R A DUSTCROPPING MASTER!!!!!!!!!!</p>';
+        break;
     }
+
+    // if (score <= 0) { // TODO: refactor to a switch statement
+    //   winMessage.innerHTML = `<p>Your score was ${score}!</p>  <p>Did you even try?</p>`;
+    // } else if (score < 10) {
+    //   winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Mehhh</p>`;
+    // } else if (score < 30) {
+    //   winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Alright maaate, not bad!</p>`;
+    // } else if (score < 50) {
+    //   winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Amazing!</p>`;
+    // } else if (score < 100) {
+    //   winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>Teach me your ways!`;
+    // } else {
+    //   winMessage.innerHTML = `<p>Your score was ${score}!</p> <p>U R A DUSTCROPPING MASTER!!!!!!!!!!</p>`;
+    // }
+
     // 4. Hide game container and reveal game over page
     gameContainer.classList.add('hidden');
     gameOver.classList.remove('hidden');
@@ -266,20 +303,24 @@ window.addEventListener('DOMContentLoaded', () => {
     };
     cells[enemyCell].classList.remove(`enemy-${enemyDirection}`);
     // use switch statement to move enemy
-    switch(enemyDirection) {
-      case 'right':
-        moveEnemy(enemyMovementConditions.right, 1, 'right');
-        break;
-      case 'left':
-        moveEnemy(enemyMovementConditions.left, -1, 'left');
-        break;
-      case 'down':
-        moveEnemy(enemyMovementConditions.down, width, 'down');
-        break;
-      case 'up':
-        moveEnemy(enemyMovementConditions.up, -width, 'up');
-        break;
-    }
+
+    moveEnemy(enemyMovementConditions[enemyDirection], directionDictionary[enemyDirection], enemyDirection);
+
+    // TODO: consider refactoring to something with a dictionary
+    // switch(enemyDirection) {
+    //   case 'right':
+    //     moveEnemy(enemyMovementConditions.right, 1, 'right');
+    //     break;
+    //   case 'left':
+    //     moveEnemy(enemyMovementConditions.left, -1, 'left');
+    //     break;
+    //   case 'down':
+    //     moveEnemy(enemyMovementConditions.down, width, 'down');
+    //     break;
+    //   case 'up':
+    //     moveEnemy(enemyMovementConditions.up, -width, 'up');
+    //     break;
+    // }
     cells[enemyCell].classList.add(`enemy-${enemyDirection}`);
   }
   // ===============
@@ -290,8 +331,8 @@ window.addEventListener('DOMContentLoaded', () => {
     audio.setAttribute('src', fartSounds[randomSound]);
     audio.play();
   });
-  go.addEventListener('click', start);
-  retry.addEventListener('click', start);
+  go.addEventListener('click', startGame);
+  retry.addEventListener('click', startGame);
   // ==============
   // JIMBA MOVEMENT
   // ==============
@@ -331,6 +372,8 @@ window.addEventListener('DOMContentLoaded', () => {
       spacebar: e.keyCode === 32
     };
     // JIMBA MOVES RIGHT
+    // moveEnemy(enemyMovementConditions[enemyDirection], directionDictionary[enemyDirection], enemyDirection);
+    // TODO: consider a dictionary solution similar to above...
     if ( keys.right || keys.d ) {
       moveJimba(jimbaMovementConditions.right, 1, 'right');
     }
@@ -387,17 +430,11 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     // JIMBA MEETS ENEMY LOGIC
     if (cells[currentCell].classList.contains(`enemy-${enemyDirection}`)) {
-      if (farts > 0) {
-        farts -= 5;
-        if (farts <= 0) {
-          farts = 0;
-        }
-      }
+      if (farts > 0) farts -= 5;
+      if (farts <= 0) farts = 0;
       collectedFart.style.width = `${farts*2}%`;
       score -= 5;
-      if (score < -99) {
-        endGame();
-      }
+      if (score < -99) endGame();
       grid.classList.add('danger');
       setTimeout(() => {
         grid.classList.remove('danger');
@@ -414,7 +451,7 @@ window.addEventListener('DOMContentLoaded', () => {
       // add enemy lose animation
     }
     // ENEMY SPEED UP LOGIC
-    if (timerObj.timeElapsed === 20) {
+    if (timerObj.timeElapsed === 20) { // TODO: refactor to switch
       clearInterval(enemyTimer);
       enemyTimer = window.setInterval(enemyAI, 800);
     } else if (timerObj.timeElapsed === 40) {

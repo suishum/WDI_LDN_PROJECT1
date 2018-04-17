@@ -285,40 +285,40 @@ div.wall {
 }
 
 div {
-  .bc {
-    background-image: url(/images/walls/bc.png);
+  .bottomCenter {
+    background-image: url(/images/walls/bottomCenter.png);
     background-size: cover;
   }
-  .blc {
-    background-image: url(/images/walls/blc.png);
+  .bottomLeftCorner {
+    background-image: url(/images/walls/bottomLeftCorner.png);
     background-size: cover;
   }
-  .brc {
-    background-image: url(/images/walls/brc.png);
+  .bottomRightCorner {
+    background-image: url(/images/walls/bottomRightCorner.png);
     background-size: cover;
   }
-  .ct {
-    background-image: url(/images/walls/ct.png);
+  .topCenter {
+    background-image: url(/images/walls/topCenter.png);
     background-size: cover;
   }
-  .hl {
-    background-image: url(/images/walls/hl.png);
+  .horizontalLeft {
+    background-image: url(/images/walls/horizontalLeft.png);
     background-size: cover;
   }
-  .hm {
-    background-image: url(/images/walls/hm.png);
+  .horizontalMiddle {
+    background-image: url(/images/walls/horizontalMiddle.png);
     background-size: cover;
   }
-  .hr {
-    background-image: url(/images/walls/hr.png);
+  .horizontalRight {
+    background-image: url(/images/walls/horizontalRight.png);
     background-size: cover;
   }
-  .lc {
-    background-image: url(/images/walls/lc.png);
+  .leftCorner {
+    background-image: url(/images/walls/leftCorner.png);
     background-size: cover;
   }
-  .rc {
-    background-image: url(/images/walls/rc.png);
+  .rightCorner {
+    background-image: url(/images/walls/rightCorner.png);
     background-size: cover;
   }
   .solo {
@@ -333,24 +333,24 @@ div {
     background-image: url(/images/walls/sq.png);
     background-size: cover;
   }
-  .tlc {
-    background-image: url(/images/walls/tlc.png);
+  .topLeftCorner {
+    background-image: url(/images/walls/topLeftCorner.png);
     background-size: cover;
   }
-  .trc {
-    background-image: url(/images/walls/trc.png);
+  .topRightCorner {
+    background-image: url(/images/walls/topRightCorner.png);
     background-size: cover;
   }
-  .vb {
-    background-image: url(/images/walls/vb.png);
+  .verticalBottom {
+    background-image: url(/images/walls/verticalBottom.png);
     background-size: cover;
   }
-  .vm {
-    background-image: url(/images/walls/vm.png);
+  .verticalMiddle {
+    background-image: url(/images/walls/verticalMiddle.png);
     background-size: cover;
   }
-  .vt {
-    background-image: url(/images/walls/vt.png);
+  .verticalTop {
+    background-image: url(/images/walls/verticalTop.png);
     background-size: cover;
   }
 }
